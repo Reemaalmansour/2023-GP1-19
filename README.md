@@ -1,6 +1,6 @@
 # Novoy
 <p align="center">
-   <img src="https://raw.githubusercontent.com/Reemaalmansour/2023-GP1-19/main/assets/logo.png" alt="Novoy logo" height="200" width="200">
+   <img src="https://raw.githubusercontent.com/Reemaalmansour/2023-GP1-19/master/assets/logo.png" alt="Novoy logo" height="200" width="200">
 </p>
 
 <h2>💡About </h2>
