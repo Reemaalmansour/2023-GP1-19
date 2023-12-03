@@ -18,7 +18,7 @@ class ResetPasswordLinkSend extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.check_circle,
               size: 100,
             ),
@@ -45,8 +45,8 @@ class ResetPasswordLinkSend extends StatelessWidget {
                   child: const Text("Back to LogIn"),
                   onPressed: () {
                       navigateTo(context, Routes.login);
-                    }
-                )),
+                    },
+                ),),
           ],
         ),
       ),

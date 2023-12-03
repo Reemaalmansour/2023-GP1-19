@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 class AppMargin {
   static const double m8 = 8.0;

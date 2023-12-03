@@ -33,7 +33,7 @@ class AppButton extends StatelessWidget {
     this.elevation,
     this.padding,
     this.gradient = false,
-    this.border
+    this.border,
   });
 
   @override
@@ -53,7 +53,7 @@ class AppButton extends StatelessWidget {
             ? const CircularProgressIndicator.adaptive()
             : content.runtimeType == String
               ? Text(content, style: TextStyle(
-                color: contentClr ?? Colors.white),)
+                color: contentClr ?? Colors.white,),)
               : content,
         // color: gradient
         //   ? Colors.transparent
@@ -73,7 +73,7 @@ class AppButton extends StatelessWidget {
           : null,
         shape: RoundedRectangleBorder(
           borderRadius: borderRadius?? BorderRadius.circular(5),
-          side: border ?? const BorderSide(color: Colors.transparent, width: 0)
+          side: border ?? const BorderSide(color: Colors.transparent, width: 0),
         ),
       ),
     );

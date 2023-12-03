@@ -17,7 +17,7 @@ class MyTextBottom extends StatelessWidget {
     return TextButton(
       style: ButtonStyle(
           textStyle: MaterialStateProperty.all(
-              Theme.of(context).textTheme.bodyLarge)),
+              Theme.of(context).textTheme.bodyLarge,),),
       onPressed: onTap,
       child: Text(label ?? ''),
     );

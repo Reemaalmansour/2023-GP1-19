@@ -1,7 +1,5 @@
 
-import 'package:flutter/material.dart';
 
-import 'color_maneger.dart';
 
 /*
 ConvexAppBar bottomNavigationBar(BuildContext ctx){

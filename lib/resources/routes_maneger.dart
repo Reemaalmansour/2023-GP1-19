@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:novoy/model/trip_model.dart';
+import 'package:novoy/presentation/create_plan/create_plan.dart';
+import 'package:novoy/presentation/edit_plan/edit_plan.dart';
 import 'package:novoy/presentation/login/reset_password.dart';
 import 'package:novoy/presentation/login/sendResetPasswordLink.dart';
 import 'package:novoy/presentation/profile/profile_screen.dart';
-
+import 'package:novoy/presentation/trip_details/trip_details.dart';
 import 'package:novoy/resources/strings_maneger.dart';
+
 import '../presentation/favorite/favorite_screen.dart';
 import '../presentation/home screen/home_screen.dart';
 import '../presentation/layout/app_layout.dart';
@@ -23,6 +27,9 @@ class Routes {
   static const String tripScreen = "/tripScreen";
   static const String resetPasswordLinkSend = "/resetPasswordLinkSend";
   static const String resetPassword = "/resetPassword";
+  static const String createPlan = "/createPlan";
+  static const String tripDetails = "/tripDetails";
+  static const String editplan = "/editplan";
 }
 
 class RouteGenerator {
@@ -41,16 +48,26 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => LoginScreen());
 
       case Routes.profileScreen:
-        return MaterialPageRoute(builder: (_) => ProfileScreen());
+        return MaterialPageRoute(builder: (_) => const ProfileScreen());
 
       case Routes.favoriteScreen:
-        return MaterialPageRoute(builder: (_) => FavoriteScreen());
+        return MaterialPageRoute(builder: (_) => const FavoriteScreen());
       case Routes.tripScreen:
-        return MaterialPageRoute(builder: (_) => TripScreen());
+        return MaterialPageRoute(builder: (_) => const TripScreen());
       case Routes.resetPasswordLinkSend:
-        return MaterialPageRoute(builder: (_) => ResetPasswordLinkSend());
+        return MaterialPageRoute(builder: (_) => const ResetPasswordLinkSend());
       case Routes.resetPassword:
-        return MaterialPageRoute(builder: (_) => ResetPassword());
+        return MaterialPageRoute(builder: (_) => const ResetPassword());
+      case Routes.editplan:
+        return MaterialPageRoute(builder: (_) => const EditPlan());
+      case Routes.createPlan:
+        return MaterialPageRoute(builder: (_) => const CreatePlan());
+      case Routes.tripDetails:
+        final tripData = settings.arguments as TripModelN;
+        return MaterialPageRoute(
+            builder: (_) => TripDetails(
+                  tripModel: tripData,
+                ),);
 
       default:
         return unDefinedRoute();
@@ -62,11 +79,11 @@ class RouteGenerator {
         builder: (_) => Scaffold(
               appBar: AppBar(
                 title: const Text(AppStrings
-                    .noRoutesFound), // todo move this string to strings manager
+                    .noRoutesFound,), // todo move this string to strings manager
               ),
               body: const Center(
                   child: Text(AppStrings
-                      .noRoutesFound)), // todo move this string to strings manager
-            ));
+                      .noRoutesFound,),), // todo move this string to strings manager
+            ),);
   }
 }

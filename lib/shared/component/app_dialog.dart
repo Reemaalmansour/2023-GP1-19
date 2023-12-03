@@ -28,7 +28,7 @@ class AppDialog extends StatelessWidget {
     this.customBtn,
     this.height,
     this.width,
-    this.decoratedBox = false
+    this.decoratedBox = false,
   });
 
   @override
@@ -46,12 +46,12 @@ class AppDialog extends StatelessWidget {
               // color: Colors.white,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: content)),
+            child: content,),),
         actions: [
           if (customBtn != null)
             CupertinoButton(
                 onPressed: (customBtn as CupertinoButton).onPressed,
-                child: (customBtn as CupertinoButton).child),
+                child: (customBtn as CupertinoButton).child,),
           if (cancelTxt != null)
             CupertinoButton(
               child: Text(
@@ -81,7 +81,7 @@ class AppDialog extends StatelessWidget {
           : Colors.transparent,
         insetPadding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20)
+          borderRadius: BorderRadius.circular(20),
         ),
         content: SizedBox(
           height: height,
@@ -90,15 +90,15 @@ class AppDialog extends StatelessWidget {
             decoration: decoratedBox && !Platform.isIOS
               ? BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(20)
+              borderRadius: BorderRadius.circular(20),
             ) : null,
-            child: content)),
+            child: content,),),
         scrollable: true,
         actions: [
           if (customBtn != null)
             MaterialButton(
                 onPressed: (customBtn as MaterialButton).onPressed,
-                child: (customBtn as MaterialButton).child),
+                child: (customBtn as MaterialButton).child,),
           if (cancelTxt != null)
             MaterialButton(
               child: Text(

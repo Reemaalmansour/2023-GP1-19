@@ -1,5 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- ... other manifest elements ... -->
+
+    <!-- Add the storage permission for reading or writing external storage -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- OR, if you only need to read from external storage -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- ... other manifest elements ... -->
 
     <application
         android:label="novoy"
@@ -31,5 +40,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+           
+        <meta-data 
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAdEWO4sVdYYVfh4eZoIKnF3a-dIPDsz2c"/>
     </application>
 </manifest>

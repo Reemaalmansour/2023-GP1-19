@@ -17,11 +17,12 @@ class AppLayout extends StatelessWidget {
             HomeCubit.get(context).screens[HomeCubit.get(context).currentIndex],
         bottomNavigationBar: ClipRRect(
           borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              topLeft: Radius.circular(20), topRight: Radius.circular(20),),
           child: BottomNavigationBar(
             items: HomeCubit.get(context).bottomItems,
             currentIndex: HomeCubit.get(context).currentIndex,
-            onTap: (index) => HomeCubit.get(context).changeBottomNavBar(index),
+            onTap: (index) =>
+                HomeCubit.get(context).changeBottomNavBar(context, index),
           ),
         ),
       ),

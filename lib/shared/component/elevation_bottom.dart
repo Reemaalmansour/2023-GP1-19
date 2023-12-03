@@ -21,14 +21,14 @@ class MyElevationBottom extends StatelessWidget {
       width: double.infinity,
       decoration: ShapeDecoration(
           shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          gradient: ColorManager.linearGradientMain),
+          gradient: ColorManager.linearGradientMain,),
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             backgroundColor: Colors.transparent,
             shadowColor: ColorManager.blueGray,
-            elevation: 0),
+            elevation: 0,),
         child: Text(label),
       ),
     );

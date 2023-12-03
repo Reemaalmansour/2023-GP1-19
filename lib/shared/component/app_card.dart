@@ -1,82 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:novoy/model/trip_model.dart';
+import 'package:novoy/shared/component/k_text.dart';
 
-import '../../resources/assets_maneger.dart';
 import '../../resources/color_maneger.dart';
-import '../../resources/responsive.dart';
 
-class AppCard extends StatelessWidget {
-  const AppCard({Key? key, required this.img, required this.name, required this.rate, required this.city}) : super(key: key);
-final String img;
-final String name;
-final String rate;
-final String city;
-
-
+class TripCard extends StatelessWidget {
+  final TripModelN tripModelN;
+  const TripCard({
+    Key? key,
+    required this.tripModelN,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 200,
-        height: 200,
-        child: Material(
-          elevation: 5,
-          borderRadius: BorderRadius.circular(10),
-          child: Column(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                          image: NetworkImage(img),
-                          fit: BoxFit.cover)),
+    print("tripModelN ${tripModelN.destinations?.length}");
+    return Card(
+      color: ColorManager.lightPrimary,
+      elevation: 5,
+      shadowColor: ColorManager.primary.withOpacity(0.5),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Row(
+          children: [
+            if (tripModelN.destinations != null &&
+                tripModelN.destinations!.isNotEmpty &&
+                tripModelN.destinations![0].image != null &&
+                tripModelN.destinations![0].image!.isNotEmpty &&
+                tripModelN.destinations?[0].image?[0] != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: Image.network(
+                  tripModelN.destinations![0].image![0],
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
                 ),
               ),
-
-              Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(name),
-                            Spacer(),
-                            Text(
-                             rate,
-                              style: TextStyle(color: ColorManager.star),
-                            ),
-                            Icon(
-                              Icons.star,
-                              color: ColorManager.star,
-                              size: 20,
-                            )
-                          ],
-                        ),
-                        responsive.sizedBoxH5,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.location_on_outlined,
-                              size: 15,
-                            ),
-                            Text(city),
-                            Spacer(),
-                            Text(
-                              'see details',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ))
-            ],
-          ),
-        ));
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    tripModelN.name ?? "",
+                    style: Theme.of(context).textTheme.headlineLarge,
+                    textAlign: TextAlign.start,
+                  ),
+                  kText(
+                    text: tripModelN.destinations?[0].description ?? "",
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

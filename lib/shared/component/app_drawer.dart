@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:novoy/presentation/home%20screen/cubit/cubit.dart';
 import 'package:novoy/presentation/profile/cubit/profile_cubit.dart';
 import 'package:novoy/resources/routes_maneger.dart';
-import 'package:novoy/shared/component/component.dart';
 
 import '../../presentation/login/cubit/cubit.dart';
 import '../../presentation/login/cubit/state.dart';
@@ -21,10 +19,10 @@ class AppDrawer extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
               color: ColorManager.primary,
-              borderRadius: BorderRadius.circular(20)),
+              borderRadius: BorderRadius.circular(20),),
           height: responsive.sHeight(context) * .2,
           width: responsive.sWidth(context) * .45,
-          child: Image.asset(ImageAssets.logo),
+          child: Image.asset(AppAssets.logo),
         ),
       ],
     );
@@ -35,7 +33,7 @@ class AppDrawer extends StatelessWidget {
       required String title,
       Widget? trailing,
       Function()? onTap,
-      Color? color}) {
+      Color? color,}) {
     return ListTile(
       leading: Icon(
         leading,
@@ -74,20 +72,20 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
             FirebaseAuth.instance.currentUser?.uid == null
-                ? SizedBox()
+                ? const SizedBox()
                 : buildDrawerListItem(
                     leading: Icons.person,
                     title: 'Edit Profile',
                     onTap: () {
                       Navigator.pushNamed(context, Routes.profileScreen).then(
-                          (value) => ProfileCubit.get(context).getUserData());
-                    }),
+                          (value) => ProfileCubit.get(context).getUserData(),);
+                    },),
             buildDrawerListItem(
                 leading: Icons.logout,
                 title: 'Log Out',
                 onTap: () {
                   AuthCubit.get(context).logOut(context);
-                }),
+                },),
             buildDrawerListItem(
                 leading: Icons.delete,
                 title: 'Delete Account',
@@ -95,7 +93,7 @@ class AppDrawer extends StatelessWidget {
                   await ProfileCubit.get(context)
                       .deleteAccount()
                       .then((value) => AuthCubit.get(context).logOut(context));
-                }),
+                },),
           ],
         ),
       ),
