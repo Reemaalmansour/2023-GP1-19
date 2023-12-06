@@ -40,9 +40,9 @@ From suggesting the finest local restaurants to must-visit attractions, Novoy's 
 <h2>✔️Requirements To Launch The Application</h2>
 <ul>
 <li> Visual Studio Code</li>
-<li> Flutter framework </li>
-<li> Dart programming language </li>
-<li> mobile emulator </li>
+<li> Flutter Framework </li>
+<li> Dart Programming Language </li>
+<li> Mobile Emulator </li>
 </ul>
   
 <h2>:memo: Launch Instructions</h2>
