@@ -27,11 +27,13 @@ From suggesting the finest local restaurants to must-visit attractions, Novoy's 
 <h2>:woman_technologist:Technology Used </h2>
 <p>
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=flutter,dart&theme=light,firebase&theme=light" />
+    <img src="https://skillicons.dev/icons?i=flutter,dart&theme=light" />
   </a>
-   
-
+    <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=firebase&theme=light" />
+  </a>
 </p>  
+
 <h2>✔️Requirements To Launch The Application</h2>
 <ul>
 <li> Visual Studio Code</li>
