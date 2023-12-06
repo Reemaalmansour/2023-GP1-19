@@ -280,6 +280,7 @@ class _TripScreenState extends State<TripScreen> {
                                           MaterialPageRoute(
                                             builder: (context) => TripDetails(
                                               tripModel: trip,
+                                              isShared: false,
                                             ),
                                           ),
                                         );
@@ -311,6 +312,7 @@ class _TripScreenState extends State<TripScreen> {
                                         MaterialPageRoute(
                                           builder: (context) => TripDetails(
                                             tripModel: trip,
+                                            isShared: true,
                                           ),
                                         ),
                                       );

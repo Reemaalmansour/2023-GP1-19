@@ -63,15 +63,15 @@ class _TripTimeLineState extends State<TripTimeLine> {
   Widget build(BuildContext context) {
     return BlocBuilder<TripBloc, TripState>(
       builder: (context, state) {
-        if (state is TripLoaded) {
-          tripDestination = state.trips
-              .firstWhere((element) => element.tripId == tripId)
-              .destinations!
-              .firstWhere(
-                (element) =>
-                    element.destinationId == tripDestination.destinationId,
-              );
-        }
+        // if (state is TripLoaded) {
+        //   tripDestination = state.trips
+        //       .firstWhere((element) => element.tripId == tripId)
+        //       .destinations!
+        //       .firstWhere(
+        //         (element) =>
+        //             element.destinationId == tripDestination.destinationId,
+        //       );
+        // }
         return ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -159,7 +159,7 @@ class _TripTimeLineState extends State<TripTimeLine> {
                               onDismissed: (direction) {
                                 context.read<TripBloc>().add(
                                       RemoveVisitedPlaceFromTripDestination(
-                                        visitedPlaceIndex: index,
+                                        placeId: place.pId!,
                                         tripDestination: tripDestination,
                                       ),
                                     );

@@ -24,8 +24,7 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
     on<OnSearchAndAddToList>(_onSearchAndAddToList);
     on<removeAllFavPlaces>(_onRemoveAllFavPlaces);
   }
-
-  /// List<PlaceModel> favPlaces = [];
+  // List<PlaceModel> favPlaces = [];
   List<PlaceModel> allPlaces = [];
 
   static PlacesBloc get(context) => BlocProvider.of(context);
@@ -124,12 +123,22 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
         isFav: isFav,
       );
       // log("newPlace ${newPlace}");
-
+      var firebasePlace = PlaceModel(
+        pId: placeid,
+        name: detail.result.name,
+        lat: lat.toString(),
+        lng: lang.toString(),
+        address: place.description.toString(),
+        description: place.description.toString(),
+        image: "",
+        imageUrls: photos,
+        isFav: false,
+      );
       AddPlace event = AddPlace(place: newPlace);
       await FirebaseFirestore.instance
           .collection('places')
-          .doc(newPlace.pId)
-          .set(newPlace.toJson());
+          .doc(firebasePlace.pId)
+          .set(firebasePlace.toJson());
 
       //* add place to the list
       context?.read<PlacesBloc>().add(event);

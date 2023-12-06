@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:novoy/model/trip_model.dart';
 import 'package:novoy/presentation/create_plan/create_plan.dart';
 import 'package:novoy/presentation/edit_plan/edit_plan.dart';
 import 'package:novoy/presentation/login/reset_password.dart';
 import 'package:novoy/presentation/login/sendResetPasswordLink.dart';
 import 'package:novoy/presentation/profile/profile_screen.dart';
-import 'package:novoy/presentation/trip_details/trip_details.dart';
 import 'package:novoy/resources/strings_maneger.dart';
 
 import '../presentation/favorite/favorite_screen.dart';
@@ -62,12 +60,13 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const EditPlan());
       case Routes.createPlan:
         return MaterialPageRoute(builder: (_) => const CreatePlan());
-      case Routes.tripDetails:
-        final tripData = settings.arguments as TripModelN;
-        return MaterialPageRoute(
-            builder: (_) => TripDetails(
-                  tripModel: tripData,
-                ),);
+      // case Routes.tripDetails:
+      //   final tripData = settings.arguments as TripModelN;
+
+      //   return MaterialPageRoute(
+      //       builder: (_) => TripDetails(
+      //             tripModel: tripData,
+      //           ),);
 
       default:
         return unDefinedRoute();
@@ -76,14 +75,18 @@ class RouteGenerator {
 
   static Route<dynamic> unDefinedRoute() {
     return MaterialPageRoute(
-        builder: (_) => Scaffold(
-              appBar: AppBar(
-                title: const Text(AppStrings
-                    .noRoutesFound,), // todo move this string to strings manager
-              ),
-              body: const Center(
-                  child: Text(AppStrings
-                      .noRoutesFound,),), // todo move this string to strings manager
-            ),);
+      builder: (_) => Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            AppStrings.noRoutesFound,
+          ), // todo move this string to strings manager
+        ),
+        body: const Center(
+          child: Text(
+            AppStrings.noRoutesFound,
+          ),
+        ), // todo move this string to strings manager
+      ),
+    );
   }
 }

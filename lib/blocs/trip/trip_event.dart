@@ -137,14 +137,14 @@ final class AddVisitedPlaceToTripDestination extends TripEvent {
 }
 
 final class RemoveVisitedPlaceFromTripDestination extends TripEvent {
-  final int visitedPlaceIndex;
+  final String placeId;
   final TripDestination tripDestination;
 
   const RemoveVisitedPlaceFromTripDestination({
-    required this.visitedPlaceIndex,
+    required this.placeId,
     required this.tripDestination,
   });
 
   @override
-  List<Object> get props => [visitedPlaceIndex, tripDestination];
+  List<Object> get props => [placeId, tripDestination];
 }

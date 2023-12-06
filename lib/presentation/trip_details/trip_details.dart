@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -20,12 +21,13 @@ import 'share_tirp_with_users.dart';
 import 'trip_time_line.dart';
 
 class TripDetails extends StatefulWidget {
+  final TripModelN tripModel;
+  final bool isShared;
   TripDetails({
     super.key,
     required this.tripModel,
+    required this.isShared,
   });
-
-  final TripModelN tripModel;
 
   @override
   State<TripDetails> createState() => _TripDetailsState();
@@ -33,10 +35,11 @@ class TripDetails extends StatefulWidget {
 
 class _TripDetailsState extends State<TripDetails> {
   late TripModelN theTrip = widget.tripModel;
+  late bool isShared = widget.isShared;
   final ScreenshotController screenshotController = ScreenshotController();
 
   Future getPdf(Uint8List screenShot) async {
-    String tempPath = (await getTemporaryDirectory()).path;
+    // String tempPath = (await getTemporaryDirectory()).path;
     String fileName = "myFile";
     pw.Document pdf = pw.Document();
     pdf.addPage(
@@ -71,13 +74,17 @@ class _TripDetailsState extends State<TripDetails> {
   @override
   Widget build(BuildContext context) {
     //List<TripLocation> locations = [];
-
+    log("isShared ${isShared}");
     return BlocBuilder<TripBloc, TripState>(
       builder: (context, state) {
         List<TripDestination> destinations = [];
-        if (state is TripLoaded) {
-          theTrip = state.trips
-              .firstWhere((element) => element.tripId == theTrip.tripId);
+        if (isShared == false) {
+          if (state is TripLoaded) {
+            theTrip = state.trips
+                .firstWhere((element) => element.tripId == theTrip.tripId);
+            destinations = theTrip.destinations!;
+          }
+        } else {
           destinations = theTrip.destinations!;
         }
         return Scaffold(
@@ -206,8 +213,12 @@ class _TripDetailsState extends State<TripDetails> {
                         destination: tripDestination,
                       ),
                     );
+
                 setState(() {
-                  theTrip.destinations!.remove(tripDestination);
+                  theTrip.destinations!.removeWhere(
+                    (element) =>
+                        element.destinationId == tripDestination.destinationId,
+                  );
                 });
                 Navigator.pop(context, true);
               } else {

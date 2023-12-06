@@ -230,10 +230,10 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     try {
       final destination = event.tripDestination;
 
-      int visitedPlaceIndex = event.visitedPlaceIndex;
+      String placeId = event.placeId;
 
-      VisitedPlaces visitedPlace =
-          destination.visitedPlaces![visitedPlaceIndex];
+      VisitedPlaces visitedPlace = destination.visitedPlaces!
+          .firstWhere((element) => element.place!.pId! == placeId);
 
       destination.visitedPlaces!.remove(visitedPlace);
 
