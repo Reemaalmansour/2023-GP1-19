@@ -27,7 +27,7 @@ From suggesting the finest local restaurants to must-visit attractions, Novoy's 
 <h2>:woman_technologist:Technology Used </h2>
 <p>
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=flutter,dart&theme=light, firebase&theme=light" />
+    <img src="https://skillicons.dev/icons?i=flutter,dart&theme=light,firebase&theme=light" />
   </a>
    
 
