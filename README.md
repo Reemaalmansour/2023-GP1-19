@@ -14,14 +14,17 @@ From suggesting the finest local restaurants to must-visit attractions, Novoy's 
 <h2>🎯 Key Features </h2>
 <h4>Users will be able to:</h4>
 <ul>
-<li> Register/log in/log out</li>
-<li>Create/Delete/Share plans</li>
-<li> Edit plan Information</li>
-<li>Collaborate in planning a trip </li>
+<li> Register/Log in/Log out</li>
 <li> Recover Passwords </li>
-<li>Edit Personal Profile</li>
-<li> Search by map</li>
-<li> Filter search</li>
+<li> Edit Personal Profile</li>
+<li> Delete their Account/s </li>
+<li> Search for Places</li>
+<li> Add Places to their Favorite List </li>
+<li> Create/Delete Plans</li>
+<li> Edit Plan Information</li>
+<li> Add/Delete Destinations and Places to and from Trips</li>
+<li> Collaborate with App Users in Planning a Trip </li>
+<li> Share Plans as PDFs</li>   
 </ul>
 
 <h2>:woman_technologist:Technology Used </h2>
