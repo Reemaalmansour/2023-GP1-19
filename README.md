@@ -55,8 +55,7 @@ From suggesting the finest local restaurants to must-visit attractions, Novoy's 
 
 <h2>:woman_technologist:GitHub Repository Link </h2>
 <p>
-  <a href="[https://github.com/Reemaalmansour/2023-GP1-19]">
-    Click Here
+GitHub URL: https://github.com/Abeer-Aljabri/2023-GP1-04
   </a>
    
 
