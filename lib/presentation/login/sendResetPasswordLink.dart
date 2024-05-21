@@ -11,7 +11,6 @@ class ResetPasswordLinkSend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
@@ -28,25 +27,24 @@ class ResetPasswordLinkSend extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .headlineSmall!
-                  .copyWith(color: ColorManager.blue),
+                  .copyWith(color: AppColors.blue),
             ),
             Text(
               "we send you the link for Reset your Password Please check your Inbox ",
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall!,
+              style: Theme.of(context).textTheme.headlineSmall!,
               textAlign: TextAlign.center,
             ),
             responsive.sizedBoxH30,
             SizedBox(
-                height: 50,
-                width: double.infinity,
-                child: ElevatedButton(
-                  child: const Text("Back to LogIn"),
-                  onPressed: () {
-                      navigateTo(context, Routes.login);
-                    },
-                ),),
+              height: 50,
+              width: double.infinity,
+              child: ElevatedButton(
+                child: const Text("Back to LogIn"),
+                onPressed: () {
+                  navigateTo(context, AppRoutes.login);
+                },
+              ),
+            ),
           ],
         ),
       ),

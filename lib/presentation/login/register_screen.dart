@@ -10,6 +10,7 @@ import '../../resources/color_maneger.dart';
 import '../../resources/responsive.dart';
 import '../../resources/routes_maneger.dart';
 import '../../shared/component/component.dart';
+import '/shared/component/k_text.dart';
 import 'cubit/cubit.dart';
 import 'cubit/state.dart';
 
@@ -29,14 +30,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          foregroundColor: ColorManager.primary,
-          backgroundColor: ColorManager.white,
+          foregroundColor: AppColors.primary,
+          backgroundColor: AppColors.white,
           title: const Text("Register"),
         ),
         body: BlocConsumer<AuthCubit, AuthState>(
           listener: (BuildContext context, state) {
             if (state is AuthRegisterSuccess) {
-              navigateToAndReplacement(context, Routes.login);
+              navigateToAndReplacement(context, AppRoutes.login);
             }
             if (state is AuthErrorOccurred) {
               if (state.error.isNotEmpty) {
@@ -87,6 +88,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 borderSide: const BorderSide(width: .5),
                                 borderRadius: BorderRadius.circular(5),
                               ),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(width: .5),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(width: .5),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -110,6 +119,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               prefixIcon: const Icon(Icons.email_outlined),
                               hintText: "firstname@exaple.com",
                               enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(width: .5),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(width: .5),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(width: .5),
                                 borderRadius: BorderRadius.circular(5),
                               ),
@@ -162,6 +179,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 borderSide: const BorderSide(width: .5),
                                 borderRadius: BorderRadius.circular(5),
                               ),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(width: .5),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(width: .5),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -177,6 +202,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                             child: DropdownButtonFormField<String>(
+                              validator: (val) {
+                                if (val == null) {
+                                  return "gender cant be empty";
+                                }
+                                return null;
+                              },
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
@@ -185,6 +216,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   borderSide: BorderSide.none,
                                 ),
                                 enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                ),
+                                disabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                 ),
                               ),
@@ -205,7 +242,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   AuthCubit.get(context).gender = val!;
                                 });
                               },
-                              value: "Male",
+                              hint: kText(text: "Select Gender"),
+                              value:
+                                  AuthCubit.get(context).gender.isEmpty == true
+                                      ? null
+                                      : AuthCubit.get(context).gender,
                             ),
                           ),
                           const SizedBox(
@@ -225,11 +266,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               }
                               return null;
                             },
+                            maxLength: 9,
                             controller: AuthCubit.get(context).phoneController,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.phone),
                               hintText: "phone",
                               enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(width: .5),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(width: .5),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(width: .5),
                                 borderRadius: BorderRadius.circular(5),
                               ),
@@ -270,6 +320,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 borderSide: const BorderSide(width: .5),
                                 borderRadius: BorderRadius.circular(5),
                               ),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(width: .5),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(width: .5),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -302,7 +360,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 onPressed: () {
                                   navigateToAndReplacement(
                                     context,
-                                    Routes.login,
+                                    AppRoutes.login,
                                   );
                                 },
                                 child: const Text("Login"),

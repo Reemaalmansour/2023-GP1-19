@@ -61,7 +61,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge!
-                          .copyWith(color: ColorManager.primary, fontSize: 18),
+                          .copyWith(color: AppColors.primary, fontSize: 18),
                     ),
                     SizedBox(
                       height: responsive.sHeight(context) * .15,
@@ -105,7 +105,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       onPressed: () async {
                         if (formState.currentState!.validate()) {
                           await sendResetPassword();
-                          navigateTo(context, Routes.resetPasswordLinkSend);
+                          navigateTo(context, AppRoutes.resetPasswordLinkSend);
                         }
                       },
                     ),

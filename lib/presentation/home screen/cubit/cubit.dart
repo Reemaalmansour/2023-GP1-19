@@ -4,19 +4,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:novoy/model/place_model.dart';
-import 'package:novoy/model/triplocation_model.dart';
-import 'package:novoy/presentation/favorite/favorite_screen.dart';
-import 'package:novoy/presentation/home%20screen/cubit/state.dart';
-import 'package:novoy/presentation/profile/profile_screen.dart';
-import 'package:novoy/presentation/trip_screen/trip_screen.dart';
+import 'package:novoy/presentation/blog/blog.dart';
 
 import '../../../global/global.dart';
-import '../../../model/category_model.dart';
-import '../../../model/trip_model.dart';
-import '../../../model/user_model.dart';
-import '../../../resources/assets_maneger.dart';
+import '../../../model/trip/trip_model.dart';
+import '../../../model/user/user_model.dart';
+import '../../../resources/constant_maneger.dart';
 import '../home_screen.dart';
+import '/model/place/place_model.dart';
+import '/model/triplocation_model.dart';
+import '/presentation/favorite/favorite_screen.dart';
+import '/presentation/home%20screen/cubit/state.dart';
+import '/presentation/profile/profile_screen.dart';
+import '/presentation/trip_screen/trip_screen.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitialState());
@@ -29,27 +29,6 @@ class HomeCubit extends Cubit<HomeState> {
   TextEditingController tripNameController = TextEditingController();
   TextEditingController timeController = TextEditingController();
   String? uId = FirebaseAuth.instance.currentUser?.uid;
-
-  List<CategoryModel> categories = [
-    CategoryModel(
-      cId: "1",
-      name: 'Hotels',
-      image: AppAssets.hotelCat,
-      description: "description",
-    ),
-    CategoryModel(
-      cId: "1",
-      name: 'Places',
-      image: AppAssets.placesCat,
-      description: "description",
-    ),
-    CategoryModel(
-      cId: "1",
-      name: 'Restaurants',
-      image: AppAssets.restaurantsCat,
-      description: "description",
-    ),
-  ];
 
   List<PlaceModel> favList = [];
 
@@ -66,22 +45,41 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   List<BottomNavigationBarItem> bottomItems = [
-    const BottomNavigationBarItem(icon: Icon(Icons.explore), label: "Explore"),
     const BottomNavigationBarItem(
-      icon: Icon(Icons.favorite),
+      icon: Icon(
+        Icons.explore,
+        color: Colors.white38,
+      ),
+      label: "Explore",
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(
+        Icons.favorite,
+        color: Colors.white38,
+      ),
       label: "Favorite",
     ),
     const BottomNavigationBarItem(
-      icon: Icon(Icons.note_alt_outlined),
+      icon: Icon(
+        Icons.note_alt_outlined,
+        color: Colors.white38,
+      ),
       label: "Trips",
     ),
-    const BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+    const BottomNavigationBarItem(
+      icon: Icon(
+        Icons.person,
+        color: Colors.white38,
+      ),
+      label: "Profile",
+    ),
   ];
   List<Widget> screens = [
     const HomeScreen(),
     const FavoriteScreen(),
     const TripScreen(),
     const ProfileScreen(),
+    const BlogScreen(),
   ];
 
   void changeBottomNavBar(context, index) {
@@ -93,23 +91,23 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> getUserData() async {
     uId = await FirebaseAuth.instance.currentUser?.uid;
-    log('+++++++++++++${uId}++++++++++++++++');
+    log('+++++++++++++++++++++++++ getUserData ${uId} +++++++++++++++++++++++++');
     if (uId == null || uId!.isEmpty) return;
-    print("+++++++++++++++++++++++++${uId}");
     try {
-      var response =
-          await FirebaseFirestore.instance.collection('user').doc(uId).get();
-      log('++++++++++++response ${response.data()}+++++++++++++++++');
+      var response = await FirebaseFirestore.instance
+          .collection(AppConstant.usersCollection)
+          .doc(uId)
+          .get();
+      log('++++++++++++ getUserData response ${response.data()} +++++++++++++++++');
       log(response.toString());
       userData = UserModel.fromJson(response.data()!);
-      log('+++++++++++++++++++++++++++++');
       kUser = userData;
+      Global.favPlaces = kUser?.favPlaces ?? [];
       log('+++++++++++++kUser $kUser ++++++++++++++++');
       emit(UserDataSuccess());
     } on Exception catch (e) {
-      print(e.toString());
+      log(e.toString());
       emit(ErrorOccurred(error: e.toString()));
-      throw e;
     }
   }
 
@@ -118,7 +116,6 @@ class HomeCubit extends Cubit<HomeState> {
     required String email,
     required String phone,
   }) async {
-    print("+++++++++++++++++++++++++${FirebaseAuth.instance.currentUser!.uid}");
     try {
       if (userName.isEmpty && email.isEmpty && phone.isEmpty) return;
       await FirebaseFirestore.instance
@@ -161,7 +158,7 @@ class HomeCubit extends Cubit<HomeState> {
   //   emit(TripLoading());
   //   try {
   //     var response = await FirebaseFirestore.instance
-  //         .collection('user')
+  //         .collection(AppConstant.userCollection)
   //         .doc(uId)
   //         .collection("trip")
   //         .get();
@@ -193,7 +190,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   //   try {
   //     DocumentReference tripReference = await FirebaseFirestore.instance
-  //         .collection("user")
+  //         .collection(AppConstant.userCollection)
   //         .doc(uId)
   //         .collection("trip")
   //         .add(model.toJson());
@@ -223,7 +220,7 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       // Query to retrieve the trip document based on the trip name
       QuerySnapshot tripQuery = await FirebaseFirestore.instance
-          .collection("user")
+          .collection(AppConstant.usersCollection)
           .doc(uId)
           .collection("trip")
           .where("name", isEqualTo: tripName)
@@ -242,7 +239,7 @@ class HomeCubit extends Cubit<HomeState> {
 
         // Add the location to the specified date within the trip
         await FirebaseFirestore.instance
-            .collection("user")
+            .collection(AppConstant.usersCollection)
             .doc(uId)
             .collection("trip")
             .doc(tripId)
@@ -275,7 +272,7 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       // Query to retrieve the trip document based on the trip name
       QuerySnapshot tripQuery = await FirebaseFirestore.instance
-          .collection("user")
+          .collection(AppConstant.usersCollection)
           .doc(uId)
           .collection("trip")
           .where("name", isEqualTo: tripName)
@@ -306,7 +303,7 @@ class HomeCubit extends Cubit<HomeState> {
       if (tripId != null) {
         // Query to retrieve all location documents for the specified date
         var locationQuery = await FirebaseFirestore.instance
-            .collection("user")
+            .collection(AppConstant.usersCollection)
             .doc(uId)
             .collection("trip")
             .doc(tripId)
@@ -336,7 +333,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   void deleteTrip(String tripName) {
     FirebaseFirestore.instance
-        .collection("user")
+        .collection(AppConstant.usersCollection)
         .doc(uId)
         .collection("trip")
         .where("name", isEqualTo: tripName)

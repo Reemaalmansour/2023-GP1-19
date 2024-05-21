@@ -1,12 +1,16 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:novoy/shared/component/component.dart';
+import 'package:novoy/shared/utils/utils.dart';
 
-import '../../../model/user_model.dart';
+import '../../../model/user/user_model.dart';
+import '../../../resources/constant_maneger.dart';
+import '/global/global.dart';
+import '/shared/component/component.dart';
 
 part 'profile_state.dart';
 
@@ -23,8 +27,10 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (uId == null || uId!.isEmpty) return;
     print("+++++++++++++++++++++++++${uId}");
     try {
-      var response =
-          await FirebaseFirestore.instance.collection('user').doc(uId).get();
+      var response = await FirebaseFirestore.instance
+          .collection(AppConstant.usersCollection)
+          .doc(uId)
+          .get();
       log('+++++++++++++++++++++++++++++');
       log(response.toString());
       userData = UserModel.fromJson(response.data()!);
@@ -43,9 +49,17 @@ class ProfileCubit extends Cubit<ProfileState> {
     required String phone,
     required String age,
     required String gender,
+    required File? image,
   }) async {
     try {
       showToast(msg: "Edit profile Success", state: ToastStates.SUCCESS);
+      String? imageUrl;
+      if (image != null) {
+        imageUrl = await Utils.uploadProfileImage(
+          image: image,
+        );
+      }
+
       UserModel updatedUser = UserModel(
         name: name,
         email: email,
@@ -53,9 +67,16 @@ class ProfileCubit extends Cubit<ProfileState> {
         uId: uId,
         gender: gender,
         age: age,
+        tripsIds: kUser?.tripsIds ?? [],
+        sharedTripsIds: kUser?.sharedTripsIds ?? [],
+        favPlacesIds: kUser?.favPlacesIds ?? [],
+        listOfInterestsTypes: kUser?.listOfInterestsTypes ?? [],
+        favPlaces: kUser?.favPlaces ?? [],
+        imageUrl: imageUrl,
+        password: kUser?.password ?? "",
       );
       await FirebaseFirestore.instance
-          .collection('user')
+          .collection(AppConstant.usersCollection)
           .doc(uId)
           .update(updatedUser.toJson());
 
@@ -72,7 +93,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     uId = await FirebaseAuth.instance.currentUser!.uid;
     if (uId != null) {
       await FirebaseFirestore.instance
-          .collection('user')
+          .collection(AppConstant.usersCollection)
           .doc(uId)
           .delete()
           .then(

@@ -1,20 +1,16 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:novoy/blocs/trip/trip_bloc.dart';
-import 'package:novoy/global/global.dart';
-import 'package:novoy/presentation/login/login_screen.dart';
-import 'package:novoy/resources/color_maneger.dart';
-import 'package:novoy/shared/component/app_card.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
-import '../../model/trip_model.dart';
 import '../../resources/responsive.dart';
-import '../../resources/strings_maneger.dart';
 import '../create_plan/create_plan.dart';
 import '../login/register_screen.dart';
 import '../trip_details/trip_details.dart';
+import '/global/global.dart';
+import '/model/trip/trip_model.dart';
+import '/presentation/login/login_screen.dart';
+import '/resources/color_maneger.dart';
+import '/shared/component/app_card.dart';
+import '/shared/utils/utils.dart';
 
 class TripScreen extends StatefulWidget {
   const TripScreen({Key? key}) : super(key: key);
@@ -25,60 +21,95 @@ class TripScreen extends StatefulWidget {
 
 class _TripScreenState extends State<TripScreen> {
   bool isMyTrips = true;
-  bool isLoading = false;
   String title = "My Trips";
-  List<TripModelN> sharedTrips = [];
+  bool isLoading = false;
+
+  List<TripModel> trips = [];
+  List<TripModel> sharedTrips = [];
+
   @override
-  void didChangeDependencies() {
-    if (kUser != null) {
-      BlocProvider.of<TripBloc>(context)
-          .add(LoadTrips(tripsIds: kUser?.tripsIds ?? []));
+  void initState() {
+    super.initState();
+    if (Global.kTrips.isNotEmpty) {
+      trips = Global.kTrips;
+    } else {
+      fetchUserTrips();
     }
 
-    super.didChangeDependencies();
+    if (Global.kSharedTrips.isNotEmpty) {
+      sharedTrips = Global.kSharedTrips;
+    } else {
+      fetchSharedTrips();
+    }
   }
 
-  Future<void> getShared() async {
-    List<TripModelN> allTrips = [];
-    try {
-      await FirebaseFirestore.instance
-          .collection('trips')
-          .where('users', arrayContains: kUser!.uId!)
-          .get()
-          .then((value) async {
-        for (var i in value.docs) {
-          final trip = TripModelN.fromJson(i.data());
-          log("${trip.destinationsIds!.length}");
-          List<TripDestination> newDestinations =
-              List.from(trip.destinations ?? []);
-          for (var i in trip.destinationsIds!) {
-            await FirebaseFirestore.instance
-                .collection('destination')
-                .doc(i)
-                .get()
-                .then((value) {
-              if (value.exists) {
-                final destination = TripDestination.fromJson(value.data()!);
-                log("${destination.name}");
-                newDestinations.add(destination);
-              }
-            });
-            log("${newDestinations.length}");
-
-            trip.destinations = newDestinations;
-          }
-
-          allTrips.add(trip);
-        }
-      });
-
+  void fetchUserTrips() async {
+    setState(() {
+      isLoading = true;
+      context.loaderOverlay.show();
+    });
+    await Utils.fetchMyTrips();
+    if (context.mounted)
       setState(() {
-        sharedTrips = allTrips;
+        trips = Global.kTrips;
         isLoading = false;
+        context.loaderOverlay.hide();
       });
-    } catch (e) {
-      log(e.toString());
-    }
+  }
+
+  void fetchSharedTrips() async {
+    setState(() {
+      isLoading = true;
+      context.loaderOverlay.show();
+    });
+    await Utils.fetchSharedTrips();
+    if (context.mounted)
+      setState(() {
+        sharedTrips = Global.kSharedTrips;
+        isLoading = false;
+        context.loaderOverlay.hide();
+      });
+  }
+
+  Future<bool> _showConfirmationDialog(
+    BuildContext context,
+    TripModel trip,
+    int index,
+  ) async {
+    bool isDeleted = false;
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Are you sure?'),
+        content: const Text(
+          'Do you want to remove the trip?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              setState(() {
+                isDeleted = false;
+              });
+            },
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await Utils.onDeleteTrip(
+                trip: trip,
+              );
+              Navigator.of(context).pop();
+              setState(() {
+                isDeleted = true;
+              });
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
+    return isDeleted;
   }
 
   @override
@@ -129,224 +160,229 @@ class _TripScreenState extends State<TripScreen> {
                 ],
               ),
             )
-          : BlocBuilder<TripBloc, TripState>(
-              builder: (context, state) {
-                List<TripModelN> trips = [];
-                if (state is TripLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is TripError) {
-                  return const Center(child: Text(AppStrings.errorMsg));
-                } else if (state is TripEmpty) {
-                  return const Center(child: Text('No Trips'));
-                } else if (state is TripLoaded) {
-                  trips = state.trips;
-                } else if (isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+          : Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                border: Border.all(color: Colors.grey[300]!),
+                              ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Row(
+                                children: [
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      backgroundColor: isMyTrips
+                                          ? AppColors.splash
+                                          : Colors.white,
+                                      foregroundColor: isMyTrips
+                                          ? AppColors.white
+                                          : Colors.black,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        isMyTrips = true;
+                                        title = "My Trips";
+                                        // context.read<TripBloc>().add(
+                                        //       LoadTrips(),
+                                        //     );
+                                      });
+                                    },
+                                    child: const Text("My Trips"),
+                                  ),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      backgroundColor: !isMyTrips
+                                          ? AppColors.splash
+                                          : Colors.white,
+                                      foregroundColor: !isMyTrips
+                                          ? AppColors.white
+                                          : Colors.black,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        isMyTrips = false;
 
-                return Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              border: Border.all(color: Colors.grey[300]!),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Row(
-                              children: [
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    backgroundColor: isMyTrips
-                                        ? ColorManager.splash
-                                        : Colors.white,
-                                    foregroundColor: isMyTrips
-                                        ? ColorManager.white
-                                        : Colors.black,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      isMyTrips = true;
-                                      title = "My Trips";
-                                    });
-                                  },
-                                  child: const Text("My Trips"),
-                                ),
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    backgroundColor: !isMyTrips
-                                        ? ColorManager.splash
-                                        : Colors.white,
-                                    foregroundColor: !isMyTrips
-                                        ? ColorManager.white
-                                        : Colors.black,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      isMyTrips = false;
-                                      if (sharedTrips.isEmpty) {
-                                        isLoading = true;
                                         title = "Shared Trips";
-                                        getShared();
-                                      }
-                                    });
+                                      });
+                                    },
+                                    child: const Text("Shared Trips"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        isMyTrips
+                            ? Expanded(
+                                child: RefreshIndicator(
+                                  onRefresh: () async {
+                                    // BlocProvider.of<TripBloc>(context).add(
+                                    //   LoadTrips(),
+                                    // );
                                   },
-                                  child: const Text("Shared Trips"),
+                                  child: ListView.separated(
+                                    itemCount: trips.length,
+                                    shrinkWrap: true,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final trip = trips[index];
+
+                                      return Dismissible(
+                                        key: Key(trip.tripId!),
+                                        background: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.red,
+                                          ),
+                                          child: const Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 20),
+                                              child: Icon(
+                                                Icons.delete,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        direction: DismissDirection.endToStart,
+                                        confirmDismiss: (direction) async {
+                                          // show dialog
+                                          final response =
+                                              await _showConfirmationDialog(
+                                            context,
+                                            trip,
+                                            index,
+                                          );
+                                          setState(() {
+                                            if (response == true) {
+                                              trips.removeAt(index);
+                                            }
+                                          });
+                                          return response;
+                                        },
+                                        child: InkWell(
+                                          onTap: () async {
+                                            final response =
+                                                await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TripDetails(
+                                                  tripModel: trip,
+                                                  isShared: false,
+                                                ),
+                                              ),
+                                            );
+                                            if (response == null) {
+                                              // update the trips
+                                              fetchUserTrips();
+                                            }
+                                          },
+                                          child: TripCard(
+                                            tip: trip,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    separatorBuilder:
+                                        (BuildContext context, int index) =>
+                                            const SizedBox(
+                                      height: 10,
+                                    ),
+                                  ),
                                 ),
-                              ],
+                              )
+                            : Expanded(
+                                child: RefreshIndicator(
+                                  onRefresh: () async {
+                                    // BlocProvider.of<TripBloc>(context).add(
+                                    //   LoadSharedTrips(),
+                                    // );
+                                  },
+                                  child: ListView.separated(
+                                    itemCount: sharedTrips.length,
+                                    shrinkWrap: true,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final trip = sharedTrips[index];
+
+                                      return InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => TripDetails(
+                                                tripModel: trip,
+                                                isShared: true,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: TripCard(
+                                          tip: trip,
+                                        ),
+                                      );
+                                    },
+                                    separatorBuilder:
+                                        (BuildContext context, int index) =>
+                                            const SizedBox(
+                                      height: 10,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                  if (kUser != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                final result = await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => const CreatePlan(),
+                                  ),
+                                );
+
+                                if (result == true) {
+                                  fetchUserTrips();
+                                }
+                              },
+                              child: const Text("Create Plan"),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      isMyTrips
-                          ? Expanded(
-                              child: ListView.separated(
-                                itemCount: trips.length,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final trip = trips[index];
-
-                                  return Dismissible(
-                                    key: Key(trip.uId!),
-                                    background: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.red,
-                                      ),
-                                      child: const Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Padding(
-                                          padding: EdgeInsets.only(right: 20),
-                                          child: Icon(
-                                            Icons.delete,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    direction: DismissDirection.endToStart,
-                                    onDismissed: (direction) async {
-                                      // show dialog
-                                      await showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          title: const Text('Are you sure?'),
-                                          content: const Text(
-                                            'Do you want to remove the trip?',
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('No'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () async {
-                                                context.read<TripBloc>().add(
-                                                      DeleteTrip(
-                                                        trip: trip,
-                                                      ),
-                                                    );
-                                                setState(() {
-                                                  trips.removeAt(index);
-                                                });
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('Yes'),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => TripDetails(
-                                              tripModel: trip,
-                                              isShared: false,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: TripCard(
-                                        tripModelN: trip,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                separatorBuilder:
-                                    (BuildContext context, int index) =>
-                                        const SizedBox(
-                                  height: 10,
-                                ),
-                              ),
-                            )
-                          : Expanded(
-                              child: ListView.separated(
-                                itemCount: sharedTrips.length,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final trip = sharedTrips[index];
-
-                                  return InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => TripDetails(
-                                            tripModel: trip,
-                                            isShared: true,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: TripCard(
-                                      tripModelN: trip,
-                                    ),
-                                  );
-                                },
-                                separatorBuilder:
-                                    (BuildContext context, int index) =>
-                                        const SizedBox(
-                                  height: 10,
-                                ),
-                              ),
-                            ),
-                    ],
-                  ),
-                );
-              },
-            ),
-      bottomNavigationBar: kUser == null
-          ? null
-          : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const CreatePlan(),
                     ),
-                  );
-                },
-                child: const Text("Create Plan"),
+                  responsive.sizedBoxH20,
+                ],
               ),
             ),
     );

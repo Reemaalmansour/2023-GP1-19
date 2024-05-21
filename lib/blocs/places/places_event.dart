@@ -63,11 +63,11 @@ final class ToggleFav extends PlacesEvent {
 }
 
 final class OnSearchAndAddToList extends PlacesEvent {
-  Prediction? place;
-  BuildContext? context;
-  bool isFav;
+  final Prediction? place;
+  final BuildContext? context;
+  final bool isFav;
 
-  OnSearchAndAddToList({
+  const OnSearchAndAddToList({
     this.place,
     this.context,
     required this.isFav,

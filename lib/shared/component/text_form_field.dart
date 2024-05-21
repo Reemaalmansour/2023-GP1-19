@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:novoy/resources/color_maneger.dart';
+
+import '/resources/color_maneger.dart';
 
 class AppTextFormField extends StatelessWidget {
-  const AppTextFormField(
-      {Key? key,
-      this.hint,
-      this.label,
-      this.prefix,
-      this.controller,
-      this.validate,
-      this.onChanged,
-      this.initVal,
-      this.textInputType,
-      this.readonly,
-      this.onTap,})
-      : super(key: key);
+  const AppTextFormField({
+    Key? key,
+    this.hint,
+    this.label,
+    this.prefix,
+    this.controller,
+    this.validate,
+    this.onChanged,
+    this.initVal,
+    this.textInputType,
+    this.readonly,
+    this.onTap,
+  }) : super(key: key);
   final String? hint;
   final String? label;
   final Widget? prefix;
@@ -43,14 +44,17 @@ class AppTextFormField extends StatelessWidget {
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(
-            borderSide: BorderSide(color: ColorManager.primary),
-            borderRadius: BorderRadius.circular(50),),
+          borderSide: BorderSide(color: AppColors.primary),
+          borderRadius: BorderRadius.circular(50),
+        ),
         enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: ColorManager.primary),
-            borderRadius: BorderRadius.circular(50),),
+          borderSide: BorderSide(color: AppColors.primary),
+          borderRadius: BorderRadius.circular(50),
+        ),
         focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: ColorManager.primary),
-            borderRadius: BorderRadius.circular(50),),
+          borderSide: BorderSide(color: AppColors.primary),
+          borderRadius: BorderRadius.circular(50),
+        ),
       ),
     );
   }

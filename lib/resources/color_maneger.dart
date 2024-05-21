@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ColorManager {
+class AppColors {
   static Color primary = const Color(0xff02A0C6);
   static Color splash = const Color(0xff021F4A);
   static Color black = Colors.black;
@@ -17,22 +17,32 @@ class ColorManager {
   static Color textFiled = const Color(0xffeeefee);
   static Color card = const Color(0xffEFEFEF);
   static Color scaffold = const Color(0xffEFEFEF);
+  static Color transparent = Colors.transparent;
+  static Color red = Colors.red;
+  static Color lightGrey = const Color(0xffF4F4F4);
+  static Color gold = const Color(0xffFFD700);
 
   static Color story = const Color(0xff1C96A7).withOpacity(.6);
-  static LinearGradient linearGradientMain = const LinearGradient(colors: [
-    Color(0xff7F339F),
-    Color(0xff1C96A7),
-  ],);
-  static RadialGradient radialGradientCard =
-      const RadialGradient(radius: 2, colors: [
-    Color(0xffFFFFFF),
-    Color(0xffF4F4F4),
-    Color(0xffEFEFEF),
-  ],);
-  static LinearGradient linearGradientMsg = const LinearGradient(colors: [
-    Color(0xff27B43D),
-    Color(0xff06D81E),
-  ],);
+  static LinearGradient linearGradientMain = const LinearGradient(
+    colors: [
+      Color(0xff7F339F),
+      Color(0xff1C96A7),
+    ],
+  );
+  static RadialGradient radialGradientCard = const RadialGradient(
+    radius: 2,
+    colors: [
+      Color(0xffFFFFFF),
+      Color(0xffF4F4F4),
+      Color(0xffEFEFEF),
+    ],
+  );
+  static LinearGradient linearGradientMsg = const LinearGradient(
+    colors: [
+      Color(0xff27B43D),
+      Color(0xff06D81E),
+    ],
+  );
 
   // new colors
   static Color darkPrimary = const Color(0xff116d7a);

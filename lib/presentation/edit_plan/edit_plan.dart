@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:novoy/presentation/home%20screen/cubit/cubit.dart';
-import 'package:novoy/presentation/home%20screen/cubit/state.dart';
-import 'package:novoy/resources/color_maneger.dart';
-import 'package:novoy/resources/responsive.dart';
+import '/presentation/home%20screen/cubit/cubit.dart';
+import '/presentation/home%20screen/cubit/state.dart';
+import '/resources/color_maneger.dart';
+import '/resources/responsive.dart';
 
 import '../../resources/assets_maneger.dart';
 import '../../shared/component/text_form_field.dart';
@@ -20,7 +20,7 @@ class EditPlanState extends State<EditPlan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.lightPrimary,
+      backgroundColor: AppColors.lightPrimary,
       appBar: AppBar(
         title: const Text("Edit a Plan"),
       ),
@@ -51,17 +51,17 @@ class EditPlanState extends State<EditPlan> {
                         decoration: InputDecoration(
                           prefix: Image.asset(AppAssets.location),
                           border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
-                              borderRadius: BorderRadius.circular(50),),
+                            borderSide: BorderSide(color: AppColors.primary),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
                           enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
-                              borderRadius: BorderRadius.circular(50),),
+                            borderSide: BorderSide(color: AppColors.primary),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
                           focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
-                              borderRadius: BorderRadius.circular(50),),
+                            borderSide: BorderSide(color: AppColors.primary),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
                         ),
                         items: [
                           "Riyadh",
@@ -75,7 +75,8 @@ class EditPlanState extends State<EditPlan> {
                                 value: e,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0,),
+                                    horizontal: 8.0,
+                                  ),
                                   child: Text(e),
                                 ),
                               ),
@@ -105,7 +106,10 @@ class EditPlanState extends State<EditPlan> {
                   SizedBox(
                     height: responsive.sHeight(context) * .1,
                   ),
-                  ElevatedButton(onPressed: () async {}, child: const Text("Create")),
+                  ElevatedButton(
+                    onPressed: () async {},
+                    child: const Text("Create"),
+                  ),
                 ],
               ),
             ),
@@ -128,7 +132,7 @@ class EditPlanState extends State<EditPlan> {
         builder: (context, child) {
           return Theme(
             data: ThemeData(
-              dialogBackgroundColor: ColorManager.lightPrimary,
+              dialogBackgroundColor: AppColors.lightPrimary,
             ),
             child: child!,
           );
@@ -136,7 +140,7 @@ class EditPlanState extends State<EditPlan> {
       );
 
   Future pickDateTime() async {
-    var cubit = HomeCubit.get(context);
+    // var cubit = HomeCubit.get(context);
     DateTimeRange? date = await pickDate();
     if (date == null) return;
     /* TimeOfDay? time = await pickTime();*/

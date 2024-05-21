@@ -33,6 +33,25 @@ class Responsive {
   final SizedBox sizedBoxH30 = const SizedBox(
     height: 30,
   );
+  final SizedBox sizedBoxH40 = const SizedBox(
+    height: 40,
+  );
+  final SizedBox sizedBoxH50 = const SizedBox(
+    height: 50,
+  );
+  final SizedBox sizedBoxH60 = const SizedBox(
+    height: 60,
+  );
+  final SizedBox sizedBoxH70 = const SizedBox(
+    height: 70,
+  );
+  final SizedBox sizedBoxH80 = const SizedBox(
+    height: 80,
+  );
+  final SizedBox sizedBoxH100 = const SizedBox(
+    height: 100,
+  );
+
   final SizedBox sizedBoxW5 = const SizedBox(
     width: 5,
   );
@@ -87,6 +106,7 @@ class Responsive {
       mediaQuery(context).padding.top + mediaQuery(context).padding.bottom;
 
   double stepperAppBarH(BuildContext context) => sHeight(context) * .08;
-  
-  EdgeInsets listViewPadding = const EdgeInsets.symmetric(vertical: 10, horizontal: 15);
+
+  EdgeInsets listViewPadding =
+      const EdgeInsets.symmetric(vertical: 10, horizontal: 15);
 }

@@ -1,98 +1,161 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:novoy/shared/component/k_text.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:novoy/shared/utils/utils.dart';
 
-import '../../blocs/places/places_bloc.dart';
 import '../../global/global.dart';
-import '../../model/place_model.dart';
+import '../../model/place/place_model.dart';
+import '../../presentation/places details/places_details.dart';
 import '../../resources/color_maneger.dart';
+import '../../resources/constant_maneger.dart';
+import '../../resources/responsive.dart';
+import '../network/cache_helper.dart';
+import 'k_text.dart';
 
-class KPlaceCard extends StatelessWidget {
+class KPlaceCard extends StatefulWidget {
   final PlaceModel place;
-  const KPlaceCard({super.key, required this.place});
+
+  const KPlaceCard({
+    super.key,
+    required this.place,
+  });
+
+  @override
+  State<KPlaceCard> createState() => _KPlaceCardState();
+}
+
+class _KPlaceCardState extends State<KPlaceCard> {
+  late PlaceModel place = widget.place;
+
+  bool isFav = false;
+
+  @override
+  void initState() {
+    isFav = place.isFav!;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlacesBloc, PlacesState>(
-      builder: (ctx, state) {
-        return Stack(
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => PlacesDetails(
+              place: place,
+              isAdd: false,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: AppColors.textFiled,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: ColorManager.textFiled,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              height: 130.spMin,
+              child: Stack(
                 children: [
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: place.imageUrls!.isNotEmpty
-                          ? Image.network(
-                              place.imageUrls!.first,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            )
-                          : Image.asset(
-                              place.image!,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
+                  Positioned.fill(
+                    child: Container(
+                      width: double.infinity,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: CachedNetworkImage(
+                          imageUrl: place.imageUrls!.isNotEmpty
+                              ? place.imageUrls!.first
+                              : "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
+                          fit: BoxFit.fill,
+                          width: double.infinity,
+                          placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: kText(
-                      text: place.name!,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: kText(
-                      text: place.address!,
-                      fontSize: 12,
-                      color: ColorManager.grey,
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IconButton(
+                      onPressed: toggleFav,
+                      icon: Icon(
+                        isFav ? Icons.favorite : Icons.favorite_border,
+                        size: 20,
+                        color: AppColors.primary,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            Positioned(
-              top: 0,
-              right: 0,
-              child: IconButton(
-                onPressed: () {
-                  if (kUser != null) {
-                    context.read<PlacesBloc>().add(
-                          ToggleFav(
-                            place: place,
-                          ),
-                        );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: kText(
-                          text: "You must login first",
-                          color: ColorManager.white,
-                        ),
-                        backgroundColor: Colors.black,
-                      ),
-                    );
-                  }
-                },
-                icon: Icon(
-                  place.isFav! ? Icons.favorite : Icons.favorite_border,
-                  size: 20,
-                  color: ColorManager.primary,
+            responsive.sizedBoxH10,
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: kText(
+                  text: place.name ?? "No Name",
+                  fontSize: 12.spMin,
+                  maxLines: 3,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
+            if (place.address != null || place.address != "")
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: kText(
+                    text: place.address ?? "No Address",
+                    fontSize: 12,
+                    color: AppColors.black,
+                  ),
+                ),
+              ),
           ],
-        );
-      },
+        ),
+      ),
     );
+  }
+
+  void toggleFav() async {
+    //check if user login
+    if (kUser != null) {
+      setState(() {
+        isFav = !isFav;
+      });
+      // update this place in favPlaces
+      if (isFav) {
+        place.isFav = true;
+        Global.favPlaces.add(place);
+      } else {
+        place.isFav = false;
+        Global.favPlaces.remove(place);
+      }
+      // update this place in cache
+      CacheHelper.saveDataToHive(
+        key: AppConstant.favPlacesCache,
+        value: Global.favPlaces,
+      );
+      await Utils.onToggleFav();
+    } else {
+      // show snackbar to login
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: kText(
+            text: "You must login first",
+            color: AppColors.white,
+          ),
+          backgroundColor: Colors.black,
+        ),
+      );
+    }
   }
 }

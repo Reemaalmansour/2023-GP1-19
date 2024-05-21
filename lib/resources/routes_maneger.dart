@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:novoy/presentation/create_plan/create_plan.dart';
-import 'package:novoy/presentation/edit_plan/edit_plan.dart';
-import 'package:novoy/presentation/login/reset_password.dart';
-import 'package:novoy/presentation/login/sendResetPasswordLink.dart';
-import 'package:novoy/presentation/profile/profile_screen.dart';
-import 'package:novoy/resources/strings_maneger.dart';
 
+import '../presentation/category/category.dart';
 import '../presentation/favorite/favorite_screen.dart';
 import '../presentation/home screen/home_screen.dart';
 import '../presentation/layout/app_layout.dart';
@@ -13,8 +8,14 @@ import '../presentation/login/login_screen.dart';
 import '../presentation/login/register_screen.dart';
 import '../presentation/trip_screen/trip_screen.dart';
 import '../splash_screen/splash_screen.dart';
+import '/presentation/create_plan/create_plan.dart';
+import '/presentation/edit_plan/edit_plan.dart';
+import '/presentation/login/reset_password.dart';
+import '/presentation/login/sendResetPasswordLink.dart';
+import '/presentation/profile/profile_screen.dart';
+import '/resources/strings_maneger.dart';
 
-class Routes {
+class AppRoutes {
   static const String splashRoute = "/";
   static const String register = "register";
   static const String login = "login";
@@ -28,38 +29,52 @@ class Routes {
   static const String createPlan = "/createPlan";
   static const String tripDetails = "/tripDetails";
   static const String editplan = "/editplan";
+  // category
+  static const String category = "/category";
 }
 
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
     switch (settings.name) {
-      case Routes.splashRoute:
+      case AppRoutes.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
-      case Routes.appLayout:
+      case AppRoutes.appLayout:
         return MaterialPageRoute(builder: (_) => AppLayout());
-      case Routes.homeScreen:
+      case AppRoutes.homeScreen:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
-      case Routes.register:
+      case AppRoutes.register:
         return MaterialPageRoute(builder: (_) => RegisterScreen());
 
-      case Routes.login:
+      case AppRoutes.login:
         return MaterialPageRoute(builder: (_) => LoginScreen());
 
-      case Routes.profileScreen:
+      case AppRoutes.profileScreen:
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
 
-      case Routes.favoriteScreen:
+      case AppRoutes.favoriteScreen:
         return MaterialPageRoute(builder: (_) => const FavoriteScreen());
-      case Routes.tripScreen:
+      case AppRoutes.tripScreen:
         return MaterialPageRoute(builder: (_) => const TripScreen());
-      case Routes.resetPasswordLinkSend:
+      case AppRoutes.resetPasswordLinkSend:
         return MaterialPageRoute(builder: (_) => const ResetPasswordLinkSend());
-      case Routes.resetPassword:
+      case AppRoutes.resetPassword:
         return MaterialPageRoute(builder: (_) => const ResetPassword());
-      case Routes.editplan:
+      case AppRoutes.editplan:
         return MaterialPageRoute(builder: (_) => const EditPlan());
-      case Routes.createPlan:
+      case AppRoutes.createPlan:
         return MaterialPageRoute(builder: (_) => const CreatePlan());
+
+      case AppRoutes.category:
+        final arguments = settings.arguments as List;
+        final catTypes = arguments[0] as List<String>;
+        final catName = arguments[1] as String;
+        return MaterialPageRoute(
+          builder: (_) => Category(
+            catTypes: catTypes,
+            catName: catName,
+          ),
+        );
+
       // case Routes.tripDetails:
       //   final tripData = settings.arguments as TripModelN;
 

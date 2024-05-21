@@ -1,15 +1,21 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:novoy/global/global.dart';
-import 'package:novoy/presentation/profile/cubit/profile_cubit.dart';
-import 'package:novoy/resources/color_maneger.dart';
-import 'package:novoy/resources/responsive.dart';
-import 'package:novoy/resources/routes_maneger.dart';
-import 'package:novoy/shared/component/component.dart';
+import 'package:novoy/shared/utils/utils.dart';
 
+import '../../model/user/user_model.dart';
 import '../../resources/strings_maneger.dart';
 import '../login/cubit/cubit.dart';
+import '/global/global.dart';
+import '/presentation/profile/cubit/profile_cubit.dart';
+import '/resources/color_maneger.dart';
+import '/resources/responsive.dart';
+import '/resources/routes_maneger.dart';
+import '/shared/component/component.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -24,6 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController ageController = TextEditingController();
   TextEditingController genderController = TextEditingController();
+  File? image;
   @override
   void initState() {
     userNameController.text = kUser?.name ?? "";
@@ -75,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             onPressed: () {
                               navigateToAndReplacement(
                                 context,
-                                Routes.register,
+                                AppRoutes.register,
                               );
                             },
                             child: const Text("Register"),
@@ -89,7 +96,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           width: 300,
                           child: ElevatedButton(
                             onPressed: () {
-                              navigateToAndReplacement(context, Routes.login);
+                              navigateToAndReplacement(
+                                context,
+                                AppRoutes.login,
+                              );
                             },
                             child: const Text("Login"),
                           ),
@@ -103,25 +113,109 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        // Profile Image
+                        Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 50,
+                              child: image != null
+                                  ? Image.file(
+                                      image!,
+                                    )
+                                  : user.imageUrl != null
+                                      ? CachedNetworkImage(
+                                          imageUrl: user.imageUrl!,
+                                        )
+                                      : Image.asset(
+                                          "assets/user.png",
+                                          fit: BoxFit.scaleDown,
+                                        ),
+                            ),
+
+                            // Edit Profile Image
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  // show bottom sheet to choose image from gallery or camera
+                                  showBottomSheet(
+                                    context: context,
+                                    builder: (context) {
+                                      return Container(
+                                        height: 100,
+                                        color: AppColors.textFiled,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            TextButton.icon(
+                                              onPressed: () async {
+                                                await Utils.pickImage(
+                                                  source: ImageSource.camera,
+                                                ).then((value) {
+                                                  setState(() {
+                                                    image = value;
+                                                  });
+                                                });
+                                                Navigator.of(context).pop();
+                                              },
+                                              label: const Text("Camera"),
+                                              icon: const Icon(Icons.camera),
+                                            ),
+                                            TextButton.icon(
+                                              onPressed: () async {
+                                                await Utils.pickImage(
+                                                  source: ImageSource.gallery,
+                                                ).then((value) {
+                                                  setState(() {
+                                                    image = value;
+                                                  });
+                                                });
+                                                Navigator.of(context).pop();
+                                              },
+                                              label: const Text("Gallery"),
+                                              icon: const Icon(Icons.image),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.textFiled,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  padding: const EdgeInsets.all(5),
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        responsive.sizedBoxH10,
                         TextFormField(
+                          readOnly: true,
                           controller: userNameController,
                           decoration: InputDecoration(
                             hintText: user.name,
                             prefixIcon: Icon(
                               Icons.person,
-                              color: ColorManager.primary,
+                              color: AppColors.primary,
                             ),
                             border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
+                              borderSide: BorderSide(color: AppColors.primary),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
+                              borderSide: BorderSide(color: AppColors.primary),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
+                              borderSide: BorderSide(color: AppColors.primary),
                             ),
                           ),
                         ),
@@ -133,42 +227,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             hintText: user.email,
                             prefixIcon: Icon(
                               Icons.email,
-                              color: ColorManager.primary,
+                              color: AppColors.primary,
                             ),
                             border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
+                              borderSide: BorderSide(color: AppColors.primary),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
+                              borderSide: BorderSide(color: AppColors.primary),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
+                              borderSide: BorderSide(color: AppColors.primary),
                             ),
                           ),
                         ),
                         responsive.sizedBoxH10,
                         TextFormField(
                           controller: phoneController,
+                          maxLength: 9,
                           decoration: InputDecoration(
                             hintText: user.phone,
                             prefixIcon: Icon(
                               Icons.call,
-                              color: ColorManager.primary,
+                              color: AppColors.primary,
                             ),
                             border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
+                              borderSide: BorderSide(color: AppColors.primary),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
+                              borderSide: BorderSide(color: AppColors.primary),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
+                              borderSide: BorderSide(color: AppColors.primary),
                             ),
                           ),
                         ),
@@ -197,19 +286,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             hintText: user.age,
                             prefixIcon: Icon(
                               Icons.numbers,
-                              color: ColorManager.primary,
+                              color: AppColors.primary,
                             ),
                             border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
+                              borderSide: BorderSide(color: AppColors.primary),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
+                              borderSide: BorderSide(color: AppColors.primary),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: ColorManager.primary),
+                              borderSide: BorderSide(color: AppColors.primary),
                             ),
                           ),
                         ),
@@ -219,7 +305,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(
-                              color: ColorManager.primary,
+                              color: AppColors.primary,
                             ),
                           ),
                           child: Row(
@@ -235,6 +321,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       MediaQuery.of(context).size.width - 65,
                                 ),
                                 child: DropdownButtonFormField<String>(
+                                  value: user.gender,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(
                                       borderSide: BorderSide.none,
@@ -259,11 +346,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       .toList(),
                                   onChanged: (val) {
                                     setState(() {
-                                      kUser?.gender = val ?? "";
+                                      UserModel? newUser =
+                                          kUser?.copyWith(gender: val ?? "");
+                                      kUser = newUser;
+
                                       genderController.text = val ?? "";
                                     });
                                   },
-                                  value: user.gender,
                                 ),
                               ),
                             ],
@@ -280,6 +369,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 phone: phoneController.text,
                                 age: ageController.text,
                                 gender: genderController.text,
+                                image: image,
                               );
                             },
                             child: const Text("Edit Profile"),

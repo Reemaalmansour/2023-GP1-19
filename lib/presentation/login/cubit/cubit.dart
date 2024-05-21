@@ -6,12 +6,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:novoy/blocs/places/places_bloc.dart';
-import 'package:novoy/global/global.dart';
-import 'package:novoy/presentation/login/cubit/state.dart';
 
-import '../../../model/user_model.dart';
+import '../../../model/user/user_model.dart';
+import '../../../resources/constant_maneger.dart';
 import '../../../shared/network/cache_helper.dart';
+import '/blocs/places/places_bloc.dart';
+import '/global/global.dart';
+import '/presentation/login/cubit/state.dart';
 
 String? userName;
 
@@ -51,6 +52,7 @@ class AuthCubit extends Cubit<AuthState> {
         uId: FirebaseAuth.instance.currentUser!.uid,
         gender: gender,
         age: age,
+        password: password,
       );
       emit(AuthRegisterSuccess());
     } on FirebaseAuthException catch (e) {
@@ -78,12 +80,13 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void userCreate({
-    @required String? name,
-    @required String? email,
-    @required String? phone,
-    @required String? uId,
-    @required String? gender,
-    @required String? age,
+    required String? name,
+    required String? email,
+    required String? phone,
+    required String? uId,
+    required String? gender,
+    required String? age,
+    required String? password,
   }) {
     UserModel model = UserModel(
       name: name,
@@ -92,10 +95,17 @@ class AuthCubit extends Cubit<AuthState> {
       uId: uId,
       gender: gender,
       age: age,
+      imageUrl: null,
+      tripsIds: [],
+      sharedTripsIds: [],
+      favPlacesIds: [],
+      listOfInterestsTypes: [],
+      favPlaces: [],
+      password: password,
     );
 
     FirebaseFirestore.instance
-        .collection("user")
+        .collection(AppConstant.usersCollection)
         .doc(uId)
         .set(model.toJson())
         .then((value) {})
@@ -165,6 +175,14 @@ class AuthCubit extends Cubit<AuthState> {
         await CacheHelper.removeData(key: 'uId');
         Phoenix.rebirth(context);
         kUser = null;
+        Global.favPlaces = [];
+        Global.kTrips = [];
+        Global.kSharedTrips = [];
+        // delete all fav places from cache
+        CacheHelper.removeData(key: AppConstant.favPlacesCache);
+        // delete all recent places from cache
+        CacheHelper.removeData(key: AppConstant.recentPlacesCache);
+
         context.read<PlacesBloc>().add(const removeAllFavPlaces());
         emit(LogOut());
       });

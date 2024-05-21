@@ -7,10 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_webservice/places.dart';
-import 'package:novoy/global/global.dart';
+import '/global/global.dart';
 
-import '../../model/place_model.dart';
-import '../../resources/strings_maneger.dart';
+import '../../model/place/place_model.dart';
+import '../../resources/constant_maneger.dart';
 
 part 'places_event.dart';
 part 'places_state.dart';
@@ -45,10 +45,16 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
         for (var item in data) {
           PlaceModel place = PlaceModel.fromJson(item.data());
 
-          if (kUser != null && kUser!.favPlacesIds.contains(item.id)) {
-            place.isFav = true;
+          if (kUser != null && kUser!.favPlacesIds!.contains(item.id)) {
+            final updatePlace = place.copyWith(isFav: true);
+            // add updated place
+            places.add(updatePlace);
+          } else {
+            final updatePlace = place.copyWith(isFav: false);
+            // add updated place
+            places.add(updatePlace);
           }
-          places.add(place);
+          // add place
         }
       } else {
         emit(const PlacesError(message: "No places found"));
@@ -62,18 +68,41 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
 
   FutureOr<void> _onUpdatePlace(UpdatePlace event, Emitter<PlacesState> emit) {}
 
-  FutureOr<void> _onToggleFav(ToggleFav event, Emitter<PlacesState> emit) {
+  FutureOr<void> _onToggleFav(
+    ToggleFav event,
+    Emitter<PlacesState> emit,
+  ) async {
     PlaceModel place = event.place;
+    List<String>? newFavIds = List.from(kUser!.favPlacesIds!);
     emit(PlacesLoading());
-    kUser!.favPlacesIds.contains(place.pId)
-        ? kUser!.favPlacesIds.remove(place.pId)
-        : kUser!.favPlacesIds.add(place.pId!);
+    try {
+      if (newFavIds.contains(place.pId)) {
+        newFavIds.remove(place.pId);
+      } else {
+        newFavIds.add(place.pId!);
+      }
 
-    FirebaseFirestore.instance.collection('user').doc(kUser!.uId).update({
-      "favPlacesIds": kUser!.favPlacesIds,
-    });
-    place.isFav = !place.isFav!;
-    emit(PlacesLoaded(places: allPlaces));
+      await FirebaseFirestore.instance
+          .collection(AppConstant.usersCollection)
+          .doc(kUser!.uId)
+          .update({
+        "favPlacesIds": newFavIds,
+      });
+      // update local user
+      kUser = kUser!.copyWith(favPlacesIds: newFavIds);
+      // update place
+      final updatePlace = place.copyWith(isFav: !place.isFav!);
+      // remove old place
+      allPlaces.remove(place);
+      // add updated place
+      allPlaces.add(updatePlace);
+      emit(PlacesLoaded(places: allPlaces));
+    } catch (e) {
+      emit(PlacesError(message: e.toString()));
+      log(
+        "_onToggleFav" + e.toString(),
+      );
+    }
   }
 
   FutureOr<void> _onAddPlace(AddPlace event, Emitter<PlacesState> emit) {
@@ -93,17 +122,19 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
     if (place != null) {
       emit(PlacesLoading());
       final plist = GoogleMapsPlaces(
-        apiKey: AppStrings.googleApiKey,
+        apiKey: AppConstant.apiKey,
         apiHeaders: await const GoogleApiHeaders().getHeaders(),
       );
+      log("plist ${plist} ");
       String placeid = place.placeId ?? "0";
-      final detail = await plist.getDetailsByPlaceId(placeid);
+      PlacesDetailsResponse detail = await plist.getDetailsByPlaceId(placeid);
       List<String> photos = [];
+      log("detail ${detail.result.types.toString()} ");
 
       for (var item in detail.result.photos) {
         String photoReference = item.photoReference;
         String photoUrl =
-            'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&key=${AppStrings.googleApiKey}';
+            'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&key=${AppConstant.apiKey}';
         photos.add(photoUrl);
       }
 
@@ -121,6 +152,7 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
         image: "",
         imageUrls: photos,
         isFav: isFav,
+        types: detail.result.types,
       );
       // log("newPlace ${newPlace}");
       var firebasePlace = PlaceModel(
@@ -133,12 +165,26 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
         image: "",
         imageUrls: photos,
         isFav: false,
+        types: detail.result.types,
       );
       AddPlace event = AddPlace(place: newPlace);
       await FirebaseFirestore.instance
           .collection('places')
           .doc(firebasePlace.pId)
           .set(firebasePlace.toJson());
+
+      await FirebaseFirestore.instance
+          .collection(AppConstant.usersCollection)
+          .doc(kUser!.uId)
+          .update({
+        "favPlacesIds": FieldValue.arrayUnion([firebasePlace.pId]),
+      });
+      List<String> newFavIds = List.from(kUser!.favPlacesIds!);
+      newFavIds.add(firebasePlace.pId!);
+      // update local user
+      kUser = kUser!.copyWith(
+        favPlacesIds: newFavIds,
+      );
 
       //* add place to the list
       context?.read<PlacesBloc>().add(event);

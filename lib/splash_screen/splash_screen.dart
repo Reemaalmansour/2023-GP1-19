@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:novoy/global/global.dart';
-import 'package:novoy/shared/component/k_text.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../presentation/home screen/cubit/cubit.dart';
 import '../resources/assets_maneger.dart';
 import '../resources/color_maneger.dart';
 import '../resources/routes_maneger.dart';
+import '/global/global.dart';
+import '/shared/component/k_text.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -43,18 +44,18 @@ class _SplashScreenState extends State<SplashScreen> {
               right: 0,
               child: Container(
                 alignment: Alignment.center,
-                height: 70,
+                height: 80.r,
                 child: Column(
                   children: [
                     kText(
                       text: "NOVOY",
-                      fontSize: 30,
+                      fontSize: 30.r,
                       fontWeight: FontWeight.bold,
                       color: Colors.white.withOpacity(0.8),
                     ),
                     kText(
                       text: "YOUR TRAVEL MATE",
-                      fontSize: 15,
+                      fontSize: 15.r,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey.withOpacity(0.8),
                     ),
@@ -68,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  color: ColorManager.white,
+                  color: AppColors.white,
                 ),
                 padding: const EdgeInsets.all(20),
                 height: 200,
@@ -93,14 +94,14 @@ class _SplashScreenState extends State<SplashScreen> {
                         child: ElevatedButton(
                           style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all(ColorManager.primary),
+                                MaterialStateProperty.all(AppColors.primary),
                             foregroundColor:
                                 MaterialStateProperty.all(Colors.white),
                           ),
                           onPressed: () {
                             kUser != null
-                                ? route = Routes.appLayout
-                                : route = Routes.login;
+                                ? route = AppRoutes.appLayout
+                                : route = AppRoutes.login;
                             Navigator.of(context).pushReplacementNamed(route);
                           },
                           child: Text(
@@ -108,7 +109,7 @@ class _SplashScreenState extends State<SplashScreen> {
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineLarge!
-                                .copyWith(color: ColorManager.white),
+                                .copyWith(color: AppColors.white),
                           ),
                         ),
                       ),

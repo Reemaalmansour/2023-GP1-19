@@ -1,150 +1,143 @@
-part of 'trip_bloc.dart';
+// part of 'trip_bloc.dart';
 
-sealed class TripEvent extends Equatable {
-  const TripEvent();
+// sealed class TripEvent extends Equatable {
+//   const TripEvent();
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
-final class LoadTrips extends TripEvent {
-  final List<String> tripsIds;
+// final class LoadTrips extends TripEvent {}
 
-  LoadTrips({
-    this.tripsIds = const <String>[],
-  });
+// final class LoadSharedTrips extends TripEvent {}
 
-  @override
-  List<Object> get props => [tripsIds];
-}
+// class AddTrip extends TripEvent {
+//   final TripModel trip;
 
-class AddTrip extends TripEvent {
-  final TripModelN trip;
+//   AddTrip({
+//     required this.trip,
+//   });
 
-  AddTrip({
-    required this.trip,
-  });
+//   @override
+//   List<Object> get props => [trip];
+// }
 
-  @override
-  List<Object> get props => [trip];
-}
+// class FetchAndUpdateTheTrip extends TripEvent {
+//   final TripModel trip;
 
-class FetchAndUpdateTheTrip extends TripEvent {
-  final TripModelN trip;
+//   FetchAndUpdateTheTrip({
+//     required this.trip,
+//   });
 
-  FetchAndUpdateTheTrip({
-    required this.trip,
-  });
+//   @override
+//   List<Object> get props => [trip];
+// }
 
-  @override
-  List<Object> get props => [trip];
-}
+// final class UpdateTrip extends TripEvent {
+//   final TripModel updatedTrip;
 
-final class UpdateTrip extends TripEvent {
-  final TripModelN updatedTrip;
+//   UpdateTrip({
+//     required this.updatedTrip,
+//   });
 
-  UpdateTrip({
-    required this.updatedTrip,
-  });
+//   @override
+//   List<Object> get props => [updatedTrip];
+// }
 
-  @override
-  List<Object> get props => [updatedTrip];
-}
+// final class DeleteTrip extends TripEvent {
+//   final TripModel trip;
 
-final class DeleteTrip extends TripEvent {
-  final TripModelN trip;
+//   DeleteTrip({
+//     required this.trip,
+//   });
 
-  DeleteTrip({
-    required this.trip,
-  });
+//   @override
+//   List<Object> get props => [trip];
+// }
 
-  @override
-  List<Object> get props => [trip];
-}
+// final class ToggleFav extends TripEvent {
+//   final TripModel trip;
 
-final class ToggleFav extends TripEvent {
-  final TripModelN trip;
+//   ToggleFav({
+//     required this.trip,
+//   });
 
-  ToggleFav({
-    required this.trip,
-  });
+//   @override
+//   List<Object> get props => [trip];
+// }
 
-  @override
-  List<Object> get props => [trip];
-}
+// final class AddDestination extends TripEvent {
+//   final TripModel trip;
+//   final TripDestinationModel destination;
 
-final class AddDestination extends TripEvent {
-  final TripModelN trip;
-  final TripDestination destination;
+//   AddDestination({
+//     required this.trip,
+//     required this.destination,
+//   });
 
-  AddDestination({
-    required this.trip,
-    required this.destination,
-  });
+//   @override
+//   List<Object> get props => [trip, destination];
+// }
 
-  @override
-  List<Object> get props => [trip, destination];
-}
+// final class UpdateDestination extends TripEvent {
+//   final TripModel trip;
+//   final TripDestinationModel updatedDestination;
 
-final class UpdateDestination extends TripEvent {
-  final TripModelN trip;
-  final TripDestination updatedDestination;
+//   UpdateDestination({
+//     required this.trip,
+//     required this.updatedDestination,
+//   });
 
-  UpdateDestination({
-    required this.trip,
-    required this.updatedDestination,
-  });
+//   @override
+//   List<Object> get props => [trip, updatedDestination];
+// }
 
-  @override
-  List<Object> get props => [trip, updatedDestination];
-}
+// final class DeleteDestination extends TripEvent {
+//   final TripModel trip;
+//   final TripDestinationModel destination;
 
-final class DeleteDestination extends TripEvent {
-  final TripModelN trip;
-  final TripDestination destination;
+//   DeleteDestination({
+//     required this.trip,
+//     required this.destination,
+//   });
 
-  DeleteDestination({
-    required this.trip,
-    required this.destination,
-  });
+//   @override
+//   List<Object> get props => [trip, destination];
+// }
 
-  @override
-  List<Object> get props => [trip, destination];
-}
+// final class AddDestinationToTheTrip extends TripEvent {
+//   final TripModel updatedTrip;
 
-final class AddDestinationToTheTrip extends TripEvent {
-  final TripModelN updatedTrip;
+//   AddDestinationToTheTrip({
+//     required this.updatedTrip,
+//   });
 
-  AddDestinationToTheTrip({
-    required this.updatedTrip,
-  });
+//   @override
+//   List<Object> get props => [updatedTrip];
+// }
 
-  @override
-  List<Object> get props => [updatedTrip];
-}
+// final class AddVisitedPlaceToTripDestination extends TripEvent {
+//   final TripDestinationModel tripDestination;
+//   final VisitedPlaceModel visitedPlace;
 
-final class AddVisitedPlaceToTripDestination extends TripEvent {
-  final TripDestination tripDestination;
-  final VisitedPlaces visitedPlace;
+//   const AddVisitedPlaceToTripDestination({
+//     required this.tripDestination,
+//     required this.visitedPlace,
+//   });
 
-  const AddVisitedPlaceToTripDestination({
-    required this.tripDestination,
-    required this.visitedPlace,
-  });
+//   @override
+//   List<Object> get props => [tripDestination, visitedPlace];
+// }
 
-  @override
-  List<Object> get props => [tripDestination, visitedPlace];
-}
+// final class RemoveVisitedPlaceFromTripDestination extends TripEvent {
+//   final VisitedPlaceModel place;
+//   final TripDestinationModel tripDestination;
 
-final class RemoveVisitedPlaceFromTripDestination extends TripEvent {
-  final String placeId;
-  final TripDestination tripDestination;
+//   const RemoveVisitedPlaceFromTripDestination({
+//     required this.place,
+//     required this.tripDestination,
+//   });
 
-  const RemoveVisitedPlaceFromTripDestination({
-    required this.placeId,
-    required this.tripDestination,
-  });
-
-  @override
-  List<Object> get props => [placeId, tripDestination];
-}
+//   @override
+//   List<Object> get props => [place, tripDestination];
+// }

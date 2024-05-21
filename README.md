@@ -14,17 +14,14 @@ From suggesting the finest local restaurants to must-visit attractions, Novoy's 
 <h2>🎯 Key Features </h2>
 <h4>Users will be able to:</h4>
 <ul>
-<li> Register/Log in/Log out</li>
+<li> Register/log in/log out</li>
+<li>Create/Delete/Share plans</li>
+<li> Edit plan Information</li>
+<li>Collaborate in planning a trip </li>
 <li> Recover Passwords </li>
-<li> Edit Personal Profile</li>
-<li> Delete their Account/s </li>
-<li> Search for Places</li>
-<li> Add Places to their Favorite List </li>
-<li> Create/Delete Plans</li>
-<li> Edit Plan Information</li>
-<li> Add/Delete Destinations and Places to and from Trips</li>
-<li> Collaborate with App Users in Planning a Trip </li>
-<li> Share Plans as PDFs</li>   
+<li>Edit Personal Profile</li>
+<li> Search by map</li>
+<li> Filter search</li>
 </ul>
 
 <h2>:woman_technologist:Technology Used </h2>
@@ -32,17 +29,15 @@ From suggesting the finest local restaurants to must-visit attractions, Novoy's 
   <a href="https://skillicons.dev">
     <img src="https://skillicons.dev/icons?i=flutter,dart&theme=light" />
   </a>
-    <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=firebase&theme=light" />
-  </a>
-</p>  
+   
 
+</p>  
 <h2>✔️Requirements To Launch The Application</h2>
 <ul>
 <li> Visual Studio Code</li>
-<li> Flutter Framework </li>
-<li> Dart Programming Language </li>
-<li> Mobile Emulator </li>
+<li> Flutter framework </li>
+<li> Dart programming language </li>
+<li> mobile emulator </li>
 </ul>
   
 <h2>:memo: Launch Instructions</h2>
@@ -57,3 +52,48 @@ From suggesting the finest local restaurants to must-visit attractions, Novoy's 
 <li> Turn on an Android Emulator or connect an android mobile to your computer using USB </li>
 <li> Run the <strong>Novoy </strong> application </li>
 </ol>
+
+
+# Changelog 1
+  // delete recommended from home
+  // add discovery places 6 places 
+  // fetch stars 
+  // add location 
+  // open location in google maps in place details 
+  // remove dummy reviews fetch good ones 
+  // add recent places 
+  // fetch reviews for every places 
+  // cache favorite, discover and recent places 
+
+  # Changelog 2
+    // fix filter
+    //
+
+
+ToDo 
+  1- ToDo List 
+  2- 
+
+
+
+
+
+
+
+
+
+<!-- - لما نضيف مكان للترب من الدسكربشن بيج بعدين نحذفه من الترب، اذا اضفنا اي مكان ثاني بنفس الطريقة راح يرجع المكان المحذوف  -->
+
+<!-- - السيرتش في الفيفورت مايضبط، يطلع بس اول مكان اضفناه  -->
+
+<!-- - Download trip لازم تكون للترب كاملة ، مو بس اول جزء من الصفحة -->
+
+<!-- - بال shared trip اذا ضغطنا عدد الميمبرز 
+يطلع اسم اليوزر (اللي فاتح الاكاونت) 
+مفروض يكون اسم الاونر واذا في اشخاص بالرحلة -->
+
+<!-- - بال shared trip مفروض مايقدر يحذف ميمبرز -->
+
+<!-- - اضافة confirmation لما نحذف ميمبر -->
+
+<!-- - الفيفورت لازم تثبت بعد ال logout -->

@@ -1,39 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:novoy/model/trip_model.dart';
-import 'package:novoy/shared/component/k_text.dart';
+import 'package:intl/intl.dart';
 
 import '../../resources/color_maneger.dart';
+import '/model/trip/trip_model.dart';
+import '/shared/component/k_text.dart';
 
 class TripCard extends StatelessWidget {
-  final TripModelN tripModelN;
+  final TripModel tip;
   const TripCard({
     Key? key,
-    required this.tripModelN,
+    required this.tip,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print("tripModelN ${tripModelN.destinations?.length}");
     return Card(
-      color: ColorManager.lightPrimary,
-      elevation: 5,
-      shadowColor: ColorManager.primary.withOpacity(0.5),
+      surfaceTintColor: AppColors.transparent,
+      color: AppColors.lightPrimary,
+      elevation: 2,
+      shadowColor: AppColors.primary.withOpacity(0.5),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Row(
           children: [
-            if (tripModelN.destinations != null &&
-                tripModelN.destinations!.isNotEmpty &&
-                tripModelN.destinations![0].image != null &&
-                tripModelN.destinations![0].image!.isNotEmpty &&
-                tripModelN.destinations?[0].image?[0] != null)
+            if (tip.destinations != null &&
+                tip.destinations!.isNotEmpty &&
+                tip.destinations![0].image != null &&
+                tip.destinations![0].image!.isNotEmpty &&
+                tip.destinations?[0].image?[0] != null)
               ClipRRect(
                 borderRadius: BorderRadius.circular(100),
                 child: Image.network(
-                  tripModelN.destinations![0].image![0],
+                  tip.destinations![0].image![0],
                   width: 50,
                   height: 50,
                   fit: BoxFit.cover,
@@ -45,14 +46,23 @@ class TripCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    tripModelN.name ?? "",
+                    tip.name ?? "",
                     style: Theme.of(context).textTheme.headlineLarge,
                     textAlign: TextAlign.start,
                   ),
                   kText(
-                    text: tripModelN.destinations?[0].description ?? "",
+                    text: tip.destinations?[0].description ?? "",
                     maxLines: 2,
                     textAlign: TextAlign.start,
+                  ),
+                  kText(
+                    text: tip.destinations?[0].createdAt != null
+                        ? "${DateFormat.yMMMd().format(tip.destinations!.first.startDate!)} - ${DateFormat.yMMMd().format(tip.destinations!.last.leaveDate!)}"
+                        : "",
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
+                    fontSize: 12,
+                    color: AppColors.grey,
                   ),
                 ],
               ),

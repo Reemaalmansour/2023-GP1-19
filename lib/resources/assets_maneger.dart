@@ -26,4 +26,5 @@ class AppAssets {
   static const plane = '$imagePath/plane.png';
   static const location = '$imagePath/location.png';
   static const calender = '$imagePath/calender.png';
+  static const noPlacesFound = '$imagePath/noPlacesFound.jpg';
 }

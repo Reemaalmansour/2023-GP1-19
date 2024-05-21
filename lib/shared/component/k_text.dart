@@ -14,6 +14,7 @@ Widget kText({
   int? maxLines,
   TextDecoration? decoration,
   TextStyle? style,
+  double? height,
 }) {
   return Text(
     text,
@@ -25,8 +26,9 @@ Widget kText({
           decoration: decoration,
           fontWeight: fontWeight,
           fontSize: fontSize != null ? fontSize.r : 12.r,
-          color: isWhite! ? ColorManager.textForm : color,
+          color: isWhite! ? AppColors.textForm : color,
           fontFamily: FontConstants.fontFamily,
+          height: height,
         ),
   );
 }

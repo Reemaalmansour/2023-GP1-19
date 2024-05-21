@@ -1,62 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:novoy/resources/styles_maneger.dart';
-import 'package:novoy/resources/value_maneger.dart';
 
+import '/resources/styles_maneger.dart';
+import '/resources/value_maneger.dart';
 import 'color_maneger.dart';
 import 'font_maneger.dart';
 
 ThemeData getApplicationTheme() {
   return ThemeData(
-    scaffoldBackgroundColor: ColorManager.white,
+    scaffoldBackgroundColor: AppColors.white,
     // main colors
-    primaryColor: ColorManager.primary,
-    primaryColorLight: ColorManager.lightPrimary,
-    primaryColorDark: ColorManager.darkPrimary,
-    disabledColor: ColorManager.grey1,
-    splashColor: ColorManager.lightPrimary.withOpacity(.5),
+    primaryColor: AppColors.primary,
+    primaryColorLight: AppColors.lightPrimary,
+    primaryColorDark: AppColors.darkPrimary,
+    disabledColor: AppColors.grey1,
+    splashColor: AppColors.lightPrimary.withOpacity(.5),
     // ripple effect color
 
     // card view theme
     cardTheme: CardTheme(
-      color: ColorManager.white,
-      shadowColor: ColorManager.grey,
+      color: AppColors.white,
+      shadowColor: AppColors.grey,
       elevation: AppSize.s4,
     ),
 
     // app bar theme
     appBarTheme: AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: ColorManager.white,
+        statusBarColor: AppColors.white,
         statusBarIconBrightness: Brightness.dark,
       ),
-      color: ColorManager.white,
+      color: AppColors.white,
       elevation: AppSize.s0,
-      shadowColor: ColorManager.lightPrimary,
-      foregroundColor: ColorManager.primary,
+      shadowColor: AppColors.lightPrimary,
+      foregroundColor: AppColors.primary,
       titleTextStyle: getBoldStyle(
         fontSize: FontSize.s22,
-        color: ColorManager.black,
+        color: AppColors.black,
       ),
     ),
 
     // button theme
     buttonTheme: ButtonThemeData(
       shape: const StadiumBorder(),
-      disabledColor: ColorManager.grey1,
-      buttonColor: ColorManager.primary,
-      splashColor: ColorManager.lightPrimary.withOpacity(.5),
+      disabledColor: AppColors.grey1,
+      buttonColor: AppColors.primary,
+      splashColor: AppColors.lightPrimary.withOpacity(.5),
     ),
 
     // elevated button them
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         textStyle: getRegularStyle(
-          color: ColorManager.white,
+          color: AppColors.white,
           fontSize: FontSize.s17,
         ),
-        backgroundColor: ColorManager.primary,
-        foregroundColor: ColorManager.white,
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSize.s12),
         ),
@@ -66,46 +66,45 @@ ThemeData getApplicationTheme() {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         textStyle: getRegularStyle(
-          color: ColorManager.primary,
+          color: AppColors.primary,
           fontSize: FontSize.s17,
         ),
-        foregroundColor: ColorManager.blue,
+        foregroundColor: AppColors.blue,
       ),
     ),
     // text theme
     textTheme: TextTheme(
       displayLarge: getSemiBoldStyle(
-        color: ColorManager.primary,
+        color: AppColors.primary,
         fontSize: FontSize.s25,
       ),
       headlineLarge: getBoldStyle(
-        color: ColorManager.black,
+        color: AppColors.black,
         fontSize: FontSize.s20,
       ),
       headlineMedium: getRegularStyle(
-        color: ColorManager.darkGrey,
+        color: AppColors.darkGrey,
         fontSize: FontSize.s22,
       ),
       headlineSmall: getBoldStyle(
-        color: ColorManager.black,
+        color: AppColors.black,
         fontSize: FontSize.s22,
       ),
-      titleLarge:
-          getBoldStyle(color: ColorManager.black, fontSize: FontSize.s30),
+      titleLarge: getBoldStyle(color: AppColors.black, fontSize: FontSize.s30),
       titleMedium: getMediumStyle(
-        color: ColorManager.darkGrey,
+        color: AppColors.darkGrey,
         fontSize: FontSize.s15,
       ),
       titleSmall: getRegularStyle(
-        color: ColorManager.blueGray,
+        color: AppColors.blueGray,
         fontSize: FontSize.s15,
       ),
       bodyLarge: getRegularStyle(
-        color: ColorManager.black,
+        color: AppColors.black,
         fontSize: FontSize.s17,
       ),
       bodySmall: getRegularStyle(
-        color: ColorManager.primary,
+        color: AppColors.primary,
         fontSize: FontSize.s12,
       ),
     ),
@@ -116,58 +115,56 @@ ThemeData getApplicationTheme() {
       contentPadding: const EdgeInsets.all(AppPadding.p8),
       // hint style
       hintStyle: getRegularStyle(
-        color: ColorManager.darkGrey,
+        color: AppColors.darkGrey,
         fontSize: FontSize.s14,
       ),
       labelStyle:
-          getMediumStyle(color: ColorManager.black, fontSize: FontSize.s14),
+          getMediumStyle(color: AppColors.black, fontSize: FontSize.s14),
       prefixStyle: getRegularStyle(
-        color: ColorManager.darkGrey,
+        color: AppColors.darkGrey,
         fontSize: FontSize.s14,
       ),
-      prefixIconColor: ColorManager.darkGrey,
-      errorStyle: getRegularStyle(color: ColorManager.error),
+      prefixIconColor: AppColors.darkGrey,
+      errorStyle: getRegularStyle(color: AppColors.error),
 
       // enabled border style
       enabledBorder: UnderlineInputBorder(
-        borderSide:
-            BorderSide(color: ColorManager.primary, width: AppSize.s1_5),
+        borderSide: BorderSide(color: AppColors.primary, width: AppSize.s1_5),
         borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
       ),
 
       // focused border style
       focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: ColorManager.grey, width: AppSize.s1_5),
+        borderSide: BorderSide(color: AppColors.grey, width: AppSize.s1_5),
         borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
       ),
 
       // error border style
       errorBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: ColorManager.error, width: AppSize.s1_5),
+        borderSide: BorderSide(color: AppColors.error, width: AppSize.s1_5),
         borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
       ),
       // focused border style
       focusedErrorBorder: UnderlineInputBorder(
-        borderSide:
-            BorderSide(color: ColorManager.primary, width: AppSize.s1_5),
+        borderSide: BorderSide(color: AppColors.primary, width: AppSize.s1_5),
         borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
       ),
     ),
 
     //bottom nav
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      selectedItemColor: ColorManager.white,
-      unselectedItemColor: ColorManager.white.withOpacity(.7),
+      selectedItemColor: AppColors.white,
+      unselectedItemColor: AppColors.white.withOpacity(.7),
       showSelectedLabels: true,
       showUnselectedLabels: true,
-      backgroundColor: ColorManager.primary,
+      backgroundColor: AppColors.primary,
       type: BottomNavigationBarType.fixed,
     ),
     iconTheme: IconThemeData(
-      color: ColorManager.primary,
+      color: AppColors.primary,
     ),
     listTileTheme: ListTileThemeData(
-      iconColor: ColorManager.primary,
+      iconColor: AppColors.primary,
     ),
   );
 }
