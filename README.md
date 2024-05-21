@@ -53,47 +53,11 @@ From suggesting the finest local restaurants to must-visit attractions, Novoy's 
 <li> Run the <strong>Novoy </strong> application </li>
 </ol>
 
+<h2>:woman_technologist:GitHub Repository Link </h2>
+<p>
+  <a href="[https://github.com/Reemaalmansour/2023-GP1-19]">
+    Click Here
+  </a>
+   
 
-# Changelog 1
-  // delete recommended from home
-  // add discovery places 6 places 
-  // fetch stars 
-  // add location 
-  // open location in google maps in place details 
-  // remove dummy reviews fetch good ones 
-  // add recent places 
-  // fetch reviews for every places 
-  // cache favorite, discover and recent places 
-
-  # Changelog 2
-    // fix filter
-    //
-
-
-ToDo 
-  1- ToDo List 
-  2- 
-
-
-
-
-
-
-
-
-
-<!-- - لما نضيف مكان للترب من الدسكربشن بيج بعدين نحذفه من الترب، اذا اضفنا اي مكان ثاني بنفس الطريقة راح يرجع المكان المحذوف  -->
-
-<!-- - السيرتش في الفيفورت مايضبط، يطلع بس اول مكان اضفناه  -->
-
-<!-- - Download trip لازم تكون للترب كاملة ، مو بس اول جزء من الصفحة -->
-
-<!-- - بال shared trip اذا ضغطنا عدد الميمبرز 
-يطلع اسم اليوزر (اللي فاتح الاكاونت) 
-مفروض يكون اسم الاونر واذا في اشخاص بالرحلة -->
-
-<!-- - بال shared trip مفروض مايقدر يحذف ميمبرز -->
-
-<!-- - اضافة confirmation لما نحذف ميمبر -->
-
-<!-- - الفيفورت لازم تثبت بعد ال logout -->
+</p> 
